@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="/home/softlabs/ptpd/restlet-jse-2.3.12/lib/org.restlet.ext.xml.jar"/>
+	<classpathentry kind="lib" path="/home/softlabs/ptpd/restlet-jse-2.3.12/lib/org.restlet.jar"/>
+	<classpathentry kind="lib" path="/home/softlabs/ptpd/restlet-jse-2.3.12/lib/org.restlet.ext.html.jar"/>
+	<classpathentry kind="lib" path="/home/softlabs/ptpd/restlet-jse-2.3.12/lib/org.restlet.ext.jaxb.jar"/>
+	<classpathentry kind="lib" path="/home/softlabs/ptpd/restlet-jse-2.3.12/lib/org.restlet.ext.freemarker.jar"/>
+	<classpathentry kind="lib" path="/home/softlabs/ptpd/restlet-jse-2.3.12/lib/org.freemarker_2.3/org.freemarker.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
