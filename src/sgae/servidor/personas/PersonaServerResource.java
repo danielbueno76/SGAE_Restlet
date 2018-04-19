@@ -55,10 +55,10 @@ public class PersonaServerResource extends ServerResource{
 		try {
 			Persona p = controladorPersonas.recuperarPersona(this.personaID);			
 			sgae.util.generated.Persona personaInfo = new sgae.util.generated.Persona();	
-			personaInfo.setDni(p.getDni());
+			personaInfo.setDNI(p.getDni());
 			personaInfo.setNombre(p.getNombre());
 			personaInfo.setApellidos(p.getApellidos());
-			personaInfo.setFechaNacimiento(p.getFechaNacimiento());
+			personaInfo.setFechanacimiento(p.getFechaNacimiento());
 			result = new JaxbRepresentation<sgae.util.generated.Persona> (personaInfo);
 			result.setFormattedOutput(true);
 		}
@@ -69,11 +69,11 @@ public class PersonaServerResource extends ServerResource{
 
 	}
 	
-//	@Delete
-//	public void remove() throws ExcepcionPersonas{
-//		controladorPersonas.borrarPersona(this.personaID);
-//		
-//	}
+	@Delete
+	public void remove() throws ExcepcionPersonas{
+		controladorPersonas.borrarPersona(this.personaID);
+		
+	}
 	
 	@Put("form-data")
 	public Representation añadircuenta (Representation datos) throws ParseException, ExcepcionPersonas, ResourceException{
@@ -117,9 +117,6 @@ public class PersonaServerResource extends ServerResource{
 //		}
 		return result;
 
-		
-		//dEVOLVER LO CAMBIADO REPRESENTATION
-		
 	}
 
 

@@ -1,12 +1,16 @@
 package sgae.servidor.gruposMusicales;
 import java.util.List;
+
 import org.restlet.ext.jaxb.JaxbRepresentation;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
+
 import sgae.nucleo.gruposMusicales.ControladorGruposMusicales;
 import sgae.servidor.aplicacion.SGAEaplicacion;
-import sgae.util.generated.GrupoMusicalesInfoBreve;
-import sgae.util.generated.GruposMusicales;
+import sgae.util.generated.GrupoInfoBreve;
+
+import sgae.util.generated.Grupos;
+
 import sgae.util.generated.Link;
 
 public class GruposServerResource extends ServerResource{
@@ -26,15 +30,15 @@ public class GruposServerResource extends ServerResource{
 	
 	
 	@Get("xml")
-	public JaxbRepresentation<GruposMusicales> toXml() {
+	public JaxbRepresentation<Grupos> toXml() {
 		
-		GruposMusicales gruposXML = new GruposMusicales();	//XML
-		final List<GrupoMusicalesInfoBreve> grupoInfoBreve= gruposXML.getGrupoMusicalesInfoBreve();
+		Grupos gruposXML = new Grupos();	//XML
+		final List<GrupoInfoBreve> grupoInfoBreve= gruposXML.getGrupoInfoBreve();
 		
 		for(sgae.nucleo.gruposMusicales.GrupoMusical g: controladorGruposMusicales.recuperarGruposMusicales() ) {
 			
-			GrupoMusicalesInfoBreve grupoInfo = new GrupoMusicalesInfoBreve();	
-			grupoInfo.setCif(g.getCif());
+			GrupoInfoBreve grupoInfo = new GrupoInfoBreve();	
+			grupoInfo.setCIF(g.getCif());
 			grupoInfo.setNombre(g.getNombre());
 			Link link = new Link();
 			link.setHref("/grupos/"+g.getCif());
@@ -45,7 +49,7 @@ public class GruposServerResource extends ServerResource{
 			
 		}
 		
-		JaxbRepresentation <GruposMusicales> result = new JaxbRepresentation<GruposMusicales> (gruposXML);
+		JaxbRepresentation <Grupos> result = new JaxbRepresentation<Grupos> (gruposXML);
 		result.setFormattedOutput(true);
 		
 		return result;

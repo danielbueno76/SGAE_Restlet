@@ -28,42 +28,142 @@ xjc -p sgae.util.generated
       <xs:sequence>
         <xs:element name="titulo" type="xs:string"/>
         <xs:element name="personasRef" type="sgaerestutillink:link"/>
+		<xs:element name="gruposMusicalesRef" type="sgaerestutillink:link"/>
+		<xs:element name="albumesRef" type="sgaerestutillink:link"/>
+	<xs:element name="pistasRef" type="sgaerestutillink:link"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  
-  <!-- Recursos derivados de persona (Personas, Persona, Estadísticas -->
+
   <xs:element name="PersonaInfoBreve">
     <xs:complexType>
       <xs:sequence>
-	<xs:element name="dni" type="xs:string"/>
-	<xs:element name="nombre" type="xs:string"/>
-	<xs:element name="apellidos" type="xs:string"/>
-	<xs:element name="uri" type ="sgaerestutillink:link"/>
+        <xs:element name="DNI" type="xs:string"/>
+<xs:element name="nombre" type="xs:string"/>
+<xs:element name="apellidos" type="xs:string"/>
+<xs:element name="uri" type="sgaerestutillink:link"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="Personas">
     <xs:complexType>
       <xs:sequence>
-	<xs:element ref="sgaerestrecursos:PersonaInfoBreve" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="sgaerestrecursos:PersonaInfoBreve" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="Persona">
     <xs:complexType>
       <xs:sequence>
-	<xs:element name="dni" type="xs:string"/>
-	<xs:element name="nombre" type="xs:string"/>
-	<xs:element name="apellidos" type="xs:string"/>
-	<xs:element name="fechaNacimiento" type="xs:string"/>
+                <xs:element name="DNI" type="xs:string"/>
+                <xs:element name="nombre" type="xs:string"/>
+        <xs:element name="apellidos" type="xs:string"/>
+<xs:element name="fechanacimiento" type="xs:string"/>
+         </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EstadisticasPersonas">
+    <xs:complexType >
+      <xs:sequence>
+        <xs:element name="numeroPersonas" type="xs:string"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="Estadisticas">
+
+    <xs:element name="GrupoInfoBreve">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="CIF" type="xs:string"/>
+<xs:element name="nombre" type="xs:string"/>
+<xs:element name="uri" type="sgaerestutillink:link"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Grupos">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="sgaerestrecursos:GrupoInfoBreve" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Grupo">
+    <xs:complexType>
+      <xs:sequence>
+                <xs:element name="CIF" type="xs:string"/>
+                <xs:element name="nombre" type="xs:string"/>
+        <xs:element name="fechacreacion" type="xs:string"/>
+         </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EstadisticasGrupos">
     <xs:complexType >
       <xs:sequence>
-      	<xs:element name="numeroPersonas" type="xs:string"/>
+        <xs:element name="numeroGrupos" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+    <xs:element name="PistaInfoBreve">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="nombre" type="xs:string"/>
+	<xs:element name="uri" type="sgaerestutillink:link"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Pistas">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="sgaerestrecursos:PistaInfoBreve" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Pista">
+    <xs:complexType>
+      <xs:sequence>
+                <xs:element name="idPista" type="xs:string"/>
+                <xs:element name="nombre" type="xs:string"/>
+        <xs:element name="duracion" type="xs:string"/>
+         </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EstadisticasPistas">
+    <xs:complexType >
+      <xs:sequence>
+        <xs:element name="numeroPistas" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="AlbumInfoBreve">
+    <xs:complexType>
+      <xs:sequence>
+	<xs:element name="titulo" type="xs:string"/>
+	<xs:element name="uri" type="sgaerestutillink:link"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Albumes">
+    <xs:complexType>
+      <xs:sequence>
+	<xs:element ref="sgaerestrecursos:AlbumInfoBreve" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Album">
+    <xs:complexType>
+      <xs:sequence>
+		<xs:element name="idAlbum" type="xs:string"/>
+		<xs:element name="titulo" type="xs:string"/>
+	<xs:element name="fechaPublicacion" type="xs:string"/>
+	<xs:element name="ejemplaresVendidos" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EstadisticasAlbumes">
+    <xs:complexType >
+      <xs:sequence>
+      	<xs:element name="numeroAlbumes" type="xs:string"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>

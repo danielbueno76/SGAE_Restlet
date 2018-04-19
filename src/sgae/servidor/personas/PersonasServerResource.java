@@ -21,6 +21,7 @@ public class PersonasServerResource extends ServerResource{
 		for (String persona: controladorPersonas.listarPersonas()) {
 			result.append((persona == null) ? "" : persona).append('\n');
 		}
+		
 		return result.toString();
 	}
 	
@@ -33,9 +34,9 @@ public class PersonasServerResource extends ServerResource{
 		final List<PersonaInfoBreve> personaInfoBreve= personasXML.getPersonaInfoBreve();
 		
 		for(sgae.nucleo.personas.Persona p: controladorPersonas.recuperarPersonas() ) {
-			
+			//DNI=00000000B&NOMBRE=Dani&APELLIDOS=Bueno Pacheco&FECHANACIMIENTO=14-04-1995
 			PersonaInfoBreve personaInfo = new PersonaInfoBreve();	
-			personaInfo.setDni(p.getDni());
+			personaInfo.setDNI(p.getDni());
 			personaInfo.setApellidos(p.getApellidos());
 			personaInfo.setNombre(p.getNombre());
 			Link link = new Link();

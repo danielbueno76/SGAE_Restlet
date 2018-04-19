@@ -9,9 +9,12 @@ import sgae.nucleo.gruposMusicales.ExcepcionGruposMusicales;
 import sgae.nucleo.personas.ControladorPersonas;
 import sgae.nucleo.personas.ExcepcionPersonas;
 import sgae.nucleo.personas.InterfazControladorPersonas;
+import sgae.servidor.albumes.AlbumServerResource;
 import sgae.servidor.albumes.AlbumesServerResource;
 import sgae.servidor.gruposMusicales.GrupoServerResource;
 import sgae.servidor.gruposMusicales.GruposServerResource;
+import sgae.servidor.gruposMusicales.MiembroServerResource;
+import sgae.servidor.gruposMusicales.MiembrosServerResource;
 import sgae.servidor.personas.PersonaServerResource;
 import sgae.servidor.personas.PersonasServerResource;
 
@@ -26,8 +29,7 @@ public class SGAEaplicacion extends Application{
 		setOwner("YO");
 		setAuthor("RHB y DBP");
 		controladorPersonas = new ControladorPersonas();
-		InterfazControladorPersonas cp = null;
-		controladorGruposMusicales = new ControladorGruposMusicales(cp);
+		controladorGruposMusicales = new ControladorGruposMusicales(controladorPersonas);
 		try {
 		controladorPersonas.crearPersona("00000000A", "Bart", "Simpson","01-04-2003");
 		controladorPersonas.crearPersona("11111111A", "Lisa", "Simpson","02-11-2006");
@@ -45,6 +47,7 @@ public class SGAEaplicacion extends Application{
 			controladorGruposMusicales.crearGrupoMusical("E0123456E", "Blur", "03-05-1988");
 			controladorGruposMusicales.crearAlbum("D0123456D", "Piloto", "02-05-1994", 3);
 			controladorGruposMusicales.crearAlbum("E0123456E", "Piloto", "09-07-1989", 5);
+			
 
 		} catch (ExcepcionGruposMusicales e) {
 				System.err.println("Ha fallado una operación para la discográfica con CIF " + 
@@ -65,7 +68,18 @@ public class SGAEaplicacion extends Application{
 			} catch (ParseException e) {
 				System.err.println("Alguna de las fechas proporcionadas no es válida.");
 		}
+		
+	try {
+		controladorGruposMusicales.anadirMiembro("D0123456D", "00000000A");
+	} catch (ExcepcionGruposMusicales e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (ExcepcionPersonas e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 	}
+	}
+	
 	
 	@Override
 	public Restlet createInboundRoot(){
@@ -83,11 +97,11 @@ public class SGAEaplicacion extends Application{
 		router.attach("/grupos/",GruposServerResource.class);
 		router.attach("/grupos/{CIFgrupo}/",GrupoServerResource.class);
 		router.attach("/grupos/{CIFgrupo}/albumes/",AlbumesServerResource.class);
-//		router.attach("/grupos/{CIFgrupo}/albumes/{titulo}/",albumes.class);
-//		router.attach("grupos/{CIFgrupo}/albumes/{titulo}/pistas/",listapistas.class);
-//		router.attach("grupos/{CIFgrupo}/albumes/{titulo}/pistas/{nombre}",pistas.class);
-//		router.attach("grupos/{CIFgrupo}/miembros/",listamiembros.class);
-//		router.attach("grupos/{CIFgrupo}/miembros/{DNI}",miembros.class);		
+		router.attach("/grupos/{CIFgrupo}/albumes/{albumID}/",AlbumServerResource.class);
+//		router.attach("grupos/{CIFgrupo}/albumes/{albumID}/pistas/",listapistas.class);
+//		router.attach("grupos/{CIFgrupo}/albumes/{albumID}/pistas/{nombre}",pistas.class);
+		router.attach("grupos/{CIFgrupo}/miembros/",MiembrosServerResource.class);
+		router.attach("grupos/{CIFgrupo}/miembros/{DNI}",MiembroServerResource.class);		
 		
 		return router;
 	}

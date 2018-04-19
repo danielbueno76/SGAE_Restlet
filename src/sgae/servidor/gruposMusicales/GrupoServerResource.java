@@ -30,15 +30,15 @@ public class GrupoServerResource extends ServerResource{
 	
 	
 	@Get("xml")
-	public JaxbRepresentation<sgae.util.generated.GrupoMusical> toXml() throws ExcepcionGruposMusicales {
+	public JaxbRepresentation<sgae.util.generated.Grupo> toXml() throws ExcepcionGruposMusicales {
 			GrupoMusical g = controladorGruposMusicales.recuperarGrupoMusical(this.grupoID);			
-			sgae.util.generated.GrupoMusical grupoInfo = new sgae.util.generated.GrupoMusical();	
-			grupoInfo.setCif(g.getCif());
+			sgae.util.generated.Grupo grupoInfo = new sgae.util.generated.Grupo();	
+			grupoInfo.setCIF(g.getCif());
 			grupoInfo.setNombre(g.getNombre());
-			grupoInfo.setFechaCreacion(g.getFechaCreacion());
+			grupoInfo.setFechacreacion(g.getFechaCreacion());
 		
 
-		JaxbRepresentation <sgae.util.generated.GrupoMusical> result = new JaxbRepresentation<sgae.util.generated.GrupoMusical> (grupoInfo);
+		JaxbRepresentation <sgae.util.generated.Grupo> result = new JaxbRepresentation<sgae.util.generated.Grupo> (grupoInfo);
 		result.setFormattedOutput(true);
 		
 		return result;
