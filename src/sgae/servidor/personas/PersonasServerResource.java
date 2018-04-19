@@ -5,6 +5,7 @@ import org.restlet.ext.jaxb.JaxbRepresentation;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 import sgae.nucleo.personas.ControladorPersonas;
+import sgae.nucleo.personas.Persona;
 import sgae.servidor.aplicacion.SGAEaplicacion;
 import sgae.util.generated.Link;
 import sgae.util.generated.PersonaInfoBreve;
@@ -18,8 +19,8 @@ public class PersonasServerResource extends ServerResource{
 	@Get("txt")
 	public String represent(){
 		StringBuilder result = new StringBuilder();
-		for (String persona: controladorPersonas.listarPersonas()) {
-			result.append((persona == null) ? "" : persona).append('\n');
+		for (Persona persona: controladorPersonas.recuperarPersonas()) {
+			result.append((persona == null) ? "" : "DNI: " + persona.getDni() + "\tNombre: " + persona.getNombre() + "\tApellidos: " + persona.getApellidos() +"\tURI: " + persona.getDni()+ "\n").append('\n');
 		}
 		
 		return result.toString();
@@ -40,7 +41,7 @@ public class PersonasServerResource extends ServerResource{
 			personaInfo.setApellidos(p.getApellidos());
 			personaInfo.setNombre(p.getNombre());
 			Link link = new Link();
-			link.setHref("/personas/"+p.getDni());
+			link.setHref(p.getDni());
 			link.setTitle("Personas");
 			link.setType("simple");
 			personaInfo.setUri(link);

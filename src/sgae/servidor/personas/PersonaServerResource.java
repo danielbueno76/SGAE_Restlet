@@ -36,7 +36,7 @@ public class PersonaServerResource extends ServerResource{
 
 
 	@Get("txt")
-	public String represent() throws ExcepcionPersonas,ResourceException{
+	public String represent(){
 		String DescripcionCompleta=null;
 		try {
 			DescripcionCompleta= controladorPersonas.verPersona(this.personaID);
@@ -50,7 +50,7 @@ public class PersonaServerResource extends ServerResource{
 	
 	
 	@Get("xml")
-	public JaxbRepresentation<sgae.util.generated.Persona> toXml() throws ExcepcionPersonas, ParseException, ResourceException {
+	public JaxbRepresentation<sgae.util.generated.Persona> toXml() {
 		JaxbRepresentation <sgae.util.generated.Persona> result = null;
 		try {
 			Persona p = controladorPersonas.recuperarPersona(this.personaID);			
@@ -70,51 +70,42 @@ public class PersonaServerResource extends ServerResource{
 	}
 	
 	@Delete
-	public void remove() throws ExcepcionPersonas{
-		controladorPersonas.borrarPersona(this.personaID);
+	public void remove(){
+		try {
+			controladorPersonas.borrarPersona(this.personaID);
+		} catch(ExcepcionPersonas ax) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		}
+		
 		
 	}
 	
 	@Put("form-data")
-	public Representation añadircuenta (Representation datos) throws ParseException, ExcepcionPersonas, ResourceException{
+	public Representation annadircuenta (Representation datos){
 
 		Form form = new Form(datos);		
 		String DNI= this.personaID;
 		String Nombre= form.getFirstValue("NOMBRE");
 		String Apellidos= form.getFirstValue("APELLIDOS");
 		String fechanacimiento= form.getFirstValue("FECHANACIMIENTO");
-//			if (fechanacimiento.equals(null)) {
-//				System.out.println("ParseException crear");
-//				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-//			}
-		 System.out.println("DNI: " + DNI );
+		System.out.println("DNI: " + DNI );
 		 System.out.println("Nombre: " + Nombre);
 		 System.out.println("Apellidos: " + Apellidos);
 		 System.out.println("Fecha de nacimiento: " + fechanacimiento);
 		 Representation result = null;
 		 
 		try {
-			controladorPersonas.crearPersona(DNI, Nombre, Apellidos, fechanacimiento); //Hay que poer las variables
-			// Si se produce la expcion significa que la persona ya existe --> el usuario quiere hacer un put de modificacion
+			controladorPersonas.crearPersona(DNI, Nombre, Apellidos, fechanacimiento); 
+			// Si se produce la excepcion significa que la persona ya existe --> el usuario quiere hacer un put de modificacion
 			 result =  new StringRepresentation("DNI: " + DNI +" Nombre: " + Nombre+" Apellidos: " + Apellidos+" Fecha de nacimiento:: " + fechanacimiento,   MediaType.TEXT_HTML);
 		} catch (ExcepcionPersonas ex){
-			try {
-			controladorPersonas.modificarPersona(DNI, Nombre, Apellidos, fechanacimiento);
-			 result =  new StringRepresentation("Nombre: " + Nombre+" Apellidos: " + Apellidos+" Fecha de nacimiento:: " + fechanacimiento,   MediaType.TEXT_HTML);
-			}
-			catch(ExcepcionPersonas ex2) {
-				ex2.printStackTrace();
-			}
-			catch (ParseException ax2) {
-				ax2.printStackTrace();
-			}
+			System.out.println("ExcepcionPersonas crear");
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}catch (ParseException ax) {
 			System.out.println("ParseException crear");
 			 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
-//		catch(ExcepcionPersonas ex) {
-//	        throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
-//		}
+
 		return result;
 
 	}
