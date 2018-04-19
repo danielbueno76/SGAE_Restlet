@@ -1,5 +1,6 @@
 package sgae.servidor.albumes;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
@@ -15,8 +16,8 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
-import org.restlet.ext.freemarker.TemplateRepresentation;
 import org.restlet.ext.jaxb.JaxbRepresentation;
+import org.restlet.ext.velocity.TemplateRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
@@ -36,6 +37,8 @@ import sgae.nucleo.personas.ExcepcionPersonas;
 import sgae.servidor.aplicacion.SGAEaplicacion;
 import sgae.util.generated.AlbumInfoBreve;
 import sgae.util.generated.Albumes;
+import sgae.util.generated.GrupoInfoBreve;
+import sgae.util.generated.Grupos;
 import sgae.util.generated.Link;
 
 public class AlbumesServerResource extends ServerResource{
@@ -58,8 +61,8 @@ public class AlbumesServerResource extends ServerResource{
 		StringBuilder result2 = new StringBuilder();
 	if (MediaType.TEXT_PLAIN.isCompatible(variant.getMediaType())) {		
 		try {
-			for (String album: controladorGruposMusicales.listarAlbumes(grupoID)) {
-				result2.append((album == null) ? "" : album).append('\n');
+			for (Album album: controladorGruposMusicales.recuperarAlbumes(grupoID)) {
+				result2.append((album == null) ? "" : "Título: " + album.getTitulo() + "\tUri relativa: " + album.getId()+"/").append('\n');
 			}
 		} catch (ExcepcionGruposMusicales e) {
 			// TODO Auto-generated catch block
@@ -69,8 +72,8 @@ public class AlbumesServerResource extends ServerResource{
 	}
 	
 	else if (MediaType.TEXT_HTML.isCompatible(variant.getMediaType())) {
-		Albumes albumes = new Albumes();	//XML
-		//final List<AlbumInfoBreve> albumInfoBreve= albumesHTML.getAlbumInfoBreve();
+		Albumes albumesHTML = new Albumes();	//XML
+		final List<AlbumInfoBreve> albumesInfoBreve= albumesHTML.getAlbumInfoBreve();
 		Map<String, Object> albumDataModel = new HashMap<String, Object>();
 		
 
@@ -84,9 +87,15 @@ public class AlbumesServerResource extends ServerResource{
 				link.setTitle("Albumes");
 				link.setType("simple");
 				albumInfo.setUri(link);
-				albumes.getAlbumInfoBreve().add(albumInfo);
+				albumesInfoBreve.add(albumInfo);
 					}
-				albumDataModel.put("Albumes", albumes);
+				albumDataModel.put("albumes", albumesInfoBreve);
+				Representation albumesVtl = new ClientResource(
+						LocalReference.createClapReference(getClass().getPackage())+ "/Albumes.vtl").get();
+						// Wrap bean with Velocity representation
+						return new TemplateRepresentation(albumesVtl, albumDataModel, MediaType.TEXT_HTML);
+
+			} catch (IOException e) {
 			} catch (ExcepcionGruposMusicales e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -94,17 +103,12 @@ public class AlbumesServerResource extends ServerResource{
 			
 			
 
-		Representation albumesVtl = new ClientResource(
-		LocalReference.createClapReference(getClass().getPackage())+ "/AlbumInfoBreve.vtl").get();
-		// Wrap bean with Velocity representation
-		return new TemplateRepresentation(albumesVtl, albumDataModel, MediaType.TEXT_HTML);
-
 	}
 		return result;
 	}
 	
 	@Post("form")
-	public Representation anadiralbum (Representation datos) throws ParseException, ExcepcionPersonas, ResourceException, ExcepcionGruposMusicales{
+	public Representation anadiralbum (Representation datos) {
 
 		Form form = new Form(datos);		
 		String CIF= this.grupoID;
@@ -114,15 +118,18 @@ public class AlbumesServerResource extends ServerResource{
 		//TITULO=Ave Maria&FECHAPUBLICACION=02-04-1999&EJEMPLARESVENDIDOS=6
 		 System.out.println("CIF: " + CIF);
 		 System.out.println("Titulo: " + titulo);
-		 System.out.println("Fecha de publicacion: " + fechaPublicacion);
+		 System.out.println("Fecha de publicación: " + fechaPublicacion);
 		 System.out.println("Numero de ejemplares vendidos: " + ejemplaresVendidos);
 		 Representation result = null;
 		 
 		try {
 			controladorGruposMusicales.crearAlbum(CIF, titulo, fechaPublicacion, ejemplaresVendidos);
 			// Si se produce la expcion significa que la persona ya existe --> el usuario quiere hacer un put de modificacion
-			 result =  new StringRepresentation("CIF: " + CIF +" Titulo: " + titulo+" Fecha de publicacion: " + fechaPublicacion+" Numero de ejemplares vendidos: " + ejemplaresVendidos,   MediaType.TEXT_HTML);
+			 result =  new StringRepresentation("CIF: " + CIF +" Título: " + titulo+" Fecha de publicación: " + fechaPublicacion+" Número de ejemplares vendidos: " + ejemplaresVendidos,   MediaType.TEXT_HTML);
 		}catch (ParseException ax) {
+			System.out.println("ParseException crear");
+			 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		}catch (ExcepcionGruposMusicales ax) {
 			System.out.println("ParseException crear");
 			 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}

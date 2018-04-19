@@ -1,5 +1,6 @@
 package sgae.servidor.albumes;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
@@ -10,8 +11,8 @@ import org.restlet.data.LocalReference;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
-import org.restlet.ext.freemarker.TemplateRepresentation;
 import org.restlet.ext.jaxb.JaxbRepresentation;
+import org.restlet.ext.velocity.TemplateRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
@@ -30,6 +31,8 @@ import sgae.nucleo.personas.ExcepcionPersonas;
 import sgae.servidor.aplicacion.SGAEaplicacion;
 import sgae.util.generated.AlbumInfoBreve;
 import sgae.util.generated.Albumes;
+import sgae.util.generated.GrupoInfoBreve;
+import sgae.util.generated.Grupos;
 import sgae.util.generated.Link;
 
 public class AlbumServerResource extends ServerResource{
@@ -45,7 +48,6 @@ public class AlbumServerResource extends ServerResource{
 		getVariants().add(new Variant(MediaType.TEXT_HTML));
 		this.grupoID = getAttribute("CIFgrupo");
 		this.albumID = getAttribute("albumID");
-		
 		
 	}
 	
@@ -67,41 +69,64 @@ public class AlbumServerResource extends ServerResource{
 	}
 	
 	else if (MediaType.TEXT_HTML.isCompatible(variant.getMediaType())) {
-		System.out.println(LocalReference.createClapReference(getClass().getPackage())+ "/AlbumInfoBreve.vtl");
-		Albumes albumesHTML = new Albumes();
-		Map<String, Object> dataModelAlbum = new HashMap<String, Object>();
-		dataModelAlbum.put("album", albumesHTML);
-		// Load Velocity template
+
+		Map<String, Object> albumDataModel = new HashMap<String, Object>();
 		
-		Representation albumesVtl = new ClientResource(
-		LocalReference.createClapReference(getClass().getPackage())+ "/AlbumInfoBreve.vtl").get();
-		// Wrap bean with Velocity representation
-		return new TemplateRepresentation(albumesVtl, dataModelAlbum, MediaType.TEXT_HTML);
-//		Personas personasHTML = new Personas();	//XML
-////		final List<PersonaInfoBreve> personaInfoBreve= personasHTML.getPersonaInfoBreve();
-//		Map<String, Object> albumModel = new HashMap<String, Object>();
-//
-//		for( Album a : controladorGruposMusicales.recuperarAlbumes(grupoID) ) {
-//			
-//			PersonaInfoBreve personaInfo = new PersonaInfoBreve();	
-//			personaInfo.setDni(p.getDni());
-//			personaInfo.setApellidos(p.getApellidos());
-//			personaInfo.setNombre(p.getNombre());
-//			Link link = new Link();
-//			link.setHref("/personas/"+p.getDni());
-//			link.setTitle("Personas");
-//			link.setType("simple");
-//			personaInfo.setUri(link);
-//			albumModel.put("Personas",personaInfo);
-//			
-//		}
-////		
-//		Representation personasVTL = new ClientResource(LocalReference.createClapReference(getClass().getPackage())	+ "/Personas.vtl").get();
-//		result= new TemplateRepresentation(personasVTL, personaInfoBreve, MediaType.TEXT_HTML);
-		}
+				try {
+					Album a = controladorGruposMusicales.recuperarAlbum(grupoID, albumID);				
+					sgae.util.generated.Album albumInfo = new sgae.util.generated.Album();	
+					albumInfo.setTitulo(a.getTitulo());
+					albumInfo.setIdAlbum(albumID);
+					albumInfo.setEjemplaresVendidos(String.valueOf(a.getEjemplaresVendidos()));
+					albumInfo.setFechaPublicacion(a.getFechaPublicacion());
+					albumDataModel.put("album", albumInfo);
+					Representation albumesVtl = new ClientResource(
+							LocalReference.createClapReference(getClass().getPackage())+ "/Album.vtl").get();
+							// Wrap bean with Velocity representation
+							return new TemplateRepresentation(albumesVtl, albumDataModel, MediaType.TEXT_HTML);
+				} catch (IOException e) {
+				} catch (ExcepcionAlbumes e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ExcepcionGruposMusicales e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}			
+
+
+	}
 		return result;
 	}
 	
+	@Put("form-data")
+	public Representation anadiralbum (Representation datos) throws ParseException, ExcepcionPersonas, ResourceException, ExcepcionGruposMusicales{
+
+		Form form = new Form(datos);		
+		String CIF= form.getFirstValue("CIF");
+		String titulo= form.getFirstValue("TITULO");
+		String fechaPublicacion= form.getFirstValue("FECHAPUBLICACION");
+		int ejemplaresVendidos= Integer.parseInt(form.getFirstValue("EJEMPLARESVENDIDOS"));
+		//CIF=D0123456D&TITULO=Ave Maria&FECHAPUBLICACION=02-04-1999&EJEMPLARESVENDIDOS=6
+		 System.out.println("CIF: " + titulo);
+		 System.out.println("Titulo: " + titulo);
+		 System.out.println("Fecha de publicacion: " + fechaPublicacion);
+		 System.out.println("Numero de ejemplares vendidos: " + ejemplaresVendidos);
+		 Representation result = null;
+		 
+		try {
+			controladorGruposMusicales.crearAlbum(CIF, titulo, fechaPublicacion, ejemplaresVendidos);
+			// Si se produce la expcion significa que la persona ya existe --> el usuario quiere hacer un put de modificacion
+			 result =  new StringRepresentation("CIF: " + CIF +" Titulo: " + titulo+" Fecha de publicacion: " + fechaPublicacion+" Numero de ejemplares vendidos: " + ejemplaresVendidos,   MediaType.TEXT_HTML);
+		}catch (ParseException ax) {
+			System.out.println("ParseException crear");
+			 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		}
+//		catch(ExcepcionPersonas ex) {
+//	        throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
+//		}
+		return result;
+
+	}
 	
 	
 }
