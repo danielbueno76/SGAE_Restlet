@@ -17,6 +17,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ClientResource;
+import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 import org.restlet.resource.ResourceException;
@@ -58,13 +59,13 @@ public class AlbumServerResource extends ServerResource{
 	if (MediaType.TEXT_PLAIN.isCompatible(variant.getMediaType())) {
 		
 		try {
-			result = new StringRepresentation(controladorGruposMusicales.verAlbum(grupoID, albumID));
+			result = new StringRepresentation(controladorGruposMusicales.verAlbum(grupoID, albumID)+"\tURI: pistas/");
 		} catch (ExcepcionAlbumes e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("ExcepcionAlbumes No existe el album");
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		} catch (ExcepcionGruposMusicales e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("ExcepcionGruposMusicales No existe el grupo");
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
 	}
 	
@@ -85,12 +86,13 @@ public class AlbumServerResource extends ServerResource{
 							// Wrap bean with Velocity representation
 							return new TemplateRepresentation(albumesVtl, albumDataModel, MediaType.TEXT_HTML);
 				} catch (IOException e) {
+					
 				} catch (ExcepcionAlbumes e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println("ExcepcionAlbumes No existe el album");
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 				} catch (ExcepcionGruposMusicales e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println("ExcepcionGruposMusicales No existe el grupo");
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 				}			
 
 
@@ -99,33 +101,57 @@ public class AlbumServerResource extends ServerResource{
 	}
 	
 	@Put("form-data")
-	public Representation anadiralbum (Representation datos) throws ParseException, ExcepcionPersonas, ResourceException, ExcepcionGruposMusicales{
+	public Representation anadiralbum (Representation datos){
 
 		Form form = new Form(datos);		
-		String CIF= form.getFirstValue("CIF");
+		String CIF= this.grupoID;
 		String titulo= form.getFirstValue("TITULO");
 		String fechaPublicacion= form.getFirstValue("FECHAPUBLICACION");
 		int ejemplaresVendidos= Integer.parseInt(form.getFirstValue("EJEMPLARESVENDIDOS"));
 		//CIF=D0123456D&TITULO=Ave Maria&FECHAPUBLICACION=02-04-1999&EJEMPLARESVENDIDOS=6
-		 System.out.println("CIF: " + titulo);
+		 System.out.println("CIF: " + CIF);
 		 System.out.println("Titulo: " + titulo);
 		 System.out.println("Fecha de publicacion: " + fechaPublicacion);
 		 System.out.println("Numero de ejemplares vendidos: " + ejemplaresVendidos);
 		 Representation result = null;
 		 
 		try {
-			controladorGruposMusicales.crearAlbum(CIF, titulo, fechaPublicacion, ejemplaresVendidos);
+			controladorGruposMusicales.modificarAlbum(CIF, this.albumID ,titulo, fechaPublicacion, ejemplaresVendidos);
 			// Si se produce la expcion significa que la persona ya existe --> el usuario quiere hacer un put de modificacion
 			 result =  new StringRepresentation("CIF: " + CIF +" Titulo: " + titulo+" Fecha de publicacion: " + fechaPublicacion+" Numero de ejemplares vendidos: " + ejemplaresVendidos,   MediaType.TEXT_HTML);
 		}catch (ParseException ax) {
-			System.out.println("ParseException crear");
+			System.out.println("ParseException Modificar Album");
 			 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
-//		catch(ExcepcionPersonas ex) {
-//	        throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
-//		}
+		catch (ExcepcionGruposMusicales ax) {
+			System.out.println("ExcepcionGruposMusicales Modificar Album");
+			 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		}
+		catch (ExcepcionAlbumes ax) {
+			System.out.println("ExcepcionAlbumes Modificar Album");
+			 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		}
+		
 		return result;
 
+	}
+	
+	@Delete
+	public void remove(){
+		
+		try {
+		controladorGruposMusicales.borrarAlbum(this.grupoID, this.albumID);
+		}
+		catch(ExcepcionAlbumes e)
+		{
+			System.out.println("ExcepcionAlbumes Borrar Album");
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		}
+		catch(ExcepcionGruposMusicales e)
+		{
+			System.out.println("ExcepcionGruposMusicales Borrar Album");
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		}
 	}
 	
 	

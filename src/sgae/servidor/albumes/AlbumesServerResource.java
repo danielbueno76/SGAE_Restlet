@@ -62,11 +62,11 @@ public class AlbumesServerResource extends ServerResource{
 	if (MediaType.TEXT_PLAIN.isCompatible(variant.getMediaType())) {		
 		try {
 			for (Album album: controladorGruposMusicales.recuperarAlbumes(grupoID)) {
-				result2.append((album == null) ? "" : "Título: " + album.getTitulo() + "\tUri relativa: " + album.getId()+"/").append('\n');
+				result2.append((album == null) ? "" : "TÃ­tulo: " + album.getTitulo() + "\tUri: " + album.getId()+"/").append('\n');
 			}
 		} catch (ExcepcionGruposMusicales e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("ExcepcionGruposMusicales No existe el grupo");
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
 		result = new StringRepresentation(result2.toString());
 	}
@@ -96,9 +96,11 @@ public class AlbumesServerResource extends ServerResource{
 						return new TemplateRepresentation(albumesVtl, albumDataModel, MediaType.TEXT_HTML);
 
 			} catch (IOException e) {
+				System.out.println("IOException GET HTML AlbumesServerResource");
+				//throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 			} catch (ExcepcionGruposMusicales e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("ExcepcionGruposMusicales No existe el grupo");
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 			}
 			
 			
@@ -118,24 +120,21 @@ public class AlbumesServerResource extends ServerResource{
 		//TITULO=Ave Maria&FECHAPUBLICACION=02-04-1999&EJEMPLARESVENDIDOS=6
 		 System.out.println("CIF: " + CIF);
 		 System.out.println("Titulo: " + titulo);
-		 System.out.println("Fecha de publicación: " + fechaPublicacion);
+		 System.out.println("Fecha de publicaciÃ³n: " + fechaPublicacion);
 		 System.out.println("Numero de ejemplares vendidos: " + ejemplaresVendidos);
 		 Representation result = null;
 		 
 		try {
 			controladorGruposMusicales.crearAlbum(CIF, titulo, fechaPublicacion, ejemplaresVendidos);
 			// Si se produce la expcion significa que la persona ya existe --> el usuario quiere hacer un put de modificacion
-			 result =  new StringRepresentation("CIF: " + CIF +" Título: " + titulo+" Fecha de publicación: " + fechaPublicacion+" Número de ejemplares vendidos: " + ejemplaresVendidos,   MediaType.TEXT_HTML);
+			 result =  new StringRepresentation("CIF: " + CIF +" TÃ­tulo: " + titulo+" Fecha de publicaciÃ³n: " + fechaPublicacion+" NÃºmero de ejemplares vendidos: " + ejemplaresVendidos,   MediaType.TEXT_HTML);
 		}catch (ParseException ax) {
-			System.out.println("ParseException crear");
+			System.out.println("ParseException CrearAlbum");
 			 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}catch (ExcepcionGruposMusicales ax) {
-			System.out.println("ParseException crear");
+			System.out.println("ExcepcionGruposMusicales Ya existe el album");
 			 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
-//		catch(ExcepcionPersonas ex) {
-//	        throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
-//		}
 		return result;
 
 	}

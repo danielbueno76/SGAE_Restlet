@@ -5,10 +5,8 @@
 			<tbody>
 				#foreach( $album in $albumes)
 				<tr>
-				<td>Título</td><td>$album.titulo</td>
-				</tr>
-				<tr>
-				<td>Album Id</td><td><a href="$album.uri.href">$album.uri.href</a></td>
+				<td>TÃ­tulo: </td><td>$album.titulo</td>
+				<td>Album Id: </td><td><a href="$album.uri.href">$album.uri.href</a></td>
 				</tr>
 				#end
 			</tbody>

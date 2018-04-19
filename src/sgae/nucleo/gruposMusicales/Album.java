@@ -11,8 +11,8 @@ import java.util.Map;
 import sgae.util.Utils;
 
 /**
- * Clase que almacena información sobre los álbumes de un grupo musical.
- * @author Manuel Rodríguez Cayetano. ETSIT UVa.
+ * Clase que almacena informaciï¿½n sobre los ï¿½lbumes de un grupo musical.
+ * @author Manuel Rodrï¿½guez Cayetano. ETSIT UVa.
  * @version 1.0
  */
 public class Album {
@@ -24,45 +24,45 @@ public class Album {
 	
 	/** Associations */
 	
-	/** La lista de pistas, indexada por un identificador Único */
+	/** La lista de pistas, indexada por un identificador ï¿½nico */
 	private Map<String,Pista> listaPistas;
-	/** Un contador para generar identificadores Únicos de pista */
+	/** Un contador para generar identificadores ï¿½nicos de pista */
 	private int ultimaPista;
 	
 	/** 
 	 * Constructor con los atributos que se pueden inicializar de partida. 
-	 * Ojo, la fecha de publicación se pasa como una cadena con el formato 
+	 * Ojo, la fecha de publicaciï¿½n se pasa como una cadena con el formato 
 	 * dd-MM-yyyy .
 	 *
-	 * @param idAlbum el identificador del álbum
-	 * @param titulo el título del álbum
-	 * @param fechaPublicacion la fecha de publicación del álbum, se 
+	 * @param idAlbum el identificador del ï¿½lbum
+	 * @param titulo el tï¿½tulo del ï¿½lbum
+	 * @param fechaPublicacion la fecha de publicaciï¿½n del ï¿½lbum, se 
 	 * pasa como una cadena dd-MM-yyyy
-	 * @param ejemplaresVendidos número de ejempares vendidos del álbum
-	 * @throws ParseException si el parámetro <i>fechaPublicacion</i> no tiene 
+	 * @param ejemplaresVendidos nï¿½mero de ejempares vendidos del ï¿½lbum
+	 * @throws ParseException si el parï¿½metro <i>fechaPublicacion</i> no tiene 
 	 * el formato dd-MM-yyyy
 	 */
 	public Album(String idAlbum, String titulo, String fechaPublicacion, int ejemplaresVendidos) 
 		throws ParseException {
 		super();
-		// Inicializa con valores pasados como parámetros
-		this.idAlbum = Utils.testStringNullOrEmptyOrWhitespaceAndSet(idAlbum, "Campo idAlbum vacío");
-		this.titulo = Utils.testStringNullOrEmptyOrWhitespaceAndSet(titulo, "Campo título vacío");
+		// Inicializa con valores pasados como parï¿½metros
+		this.idAlbum = Utils.testStringNullOrEmptyOrWhitespaceAndSet(idAlbum, "Campo idAlbum vacï¿½o");
+		this.titulo = Utils.testStringNullOrEmptyOrWhitespaceAndSet(titulo, "Campo tï¿½tulo vacï¿½o");
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 		dateFormat.setLenient(false);
 		if (Utils.isStringNullOrEmptyOrWhitespace(fechaPublicacion)) {
-			throw new ParseException("Campo fecha de publicación vacío", 0);
+			throw new ParseException("Campo fecha de publicaciï¿½n vacï¿½o", 0);
 		}
 		this.fechaPublicacion = dateFormat.parse(fechaPublicacion);
 		this.ejemplaresVendidos = ejemplaresVendidos;
-		// Inicializa una lista de pistas vacía y el contador de pistas
+		// Inicializa una lista de pistas vacï¿½a y el contador de pistas
 		listaPistas = new HashMap<String,Pista>();
 		ultimaPista = 0;
 	}
 	
 	/**
-	 * Método que lee el identificador del álbum.
-	 * NOTA: El identificador sólo se puede leer, no escribir.
+	 * Mï¿½todo que lee el identificador del ï¿½lbum.
+	 * NOTA: El identificador sï¿½lo se puede leer, no escribir.
 	 * @return el valor del identificador
 	 */
 	public String getId() {
@@ -70,33 +70,33 @@ public class Album {
 	}
 	
 	/**
-	 * Método que devuelve el título del álbum.
-	 * @return el título del álbum
+	 * Mï¿½todo que devuelve el tï¿½tulo del ï¿½lbum.
+	 * @return el tï¿½tulo del ï¿½lbum
 	 */
 	public String getTitulo() {
 		return titulo;
 	}
 	
 	/**
-	 * Método que modifica el título.
-	 * @param nuevoTitulo el nuevo título del nombre
+	 * Mï¿½todo que modifica el tï¿½tulo.
+	 * @param nuevoTitulo el nuevo tï¿½tulo del nombre
 	 */
 	public void setTitulo(String nuevoTitulo) {
-		titulo = Utils.testStringNullOrEmptyOrWhitespaceAndSet(nuevoTitulo, "Campo título vacío");
+		titulo = Utils.testStringNullOrEmptyOrWhitespaceAndSet(nuevoTitulo, "Campo tï¿½tulo vacï¿½o");
 	}
 	
 	/** 
-	 * Método que devuelve la fecha de publicación como una cadena.
-	 * @return la fecha de publicación en formato dd-MM-yyyy
+	 * Mï¿½todo que devuelve la fecha de publicaciï¿½n como una cadena.
+	 * @return la fecha de publicaciï¿½n en formato dd-MM-yyyy
 	 */
 	public String getFechaPublicacion() {
 		return new SimpleDateFormat("dd-MM-yyyy").format(fechaPublicacion);
 	}
 	
 	/**
-	 * Método que cambia la fecha de publicación a partir de una cadena.
-	 * @param nuevaFechaPublicacion la nueva fecha de publicación del álbum
-	 * @throws ParseException si el parámetro <i>fechaPublicacion</i> no tiene 
+	 * Mï¿½todo que cambia la fecha de publicaciï¿½n a partir de una cadena.
+	 * @param nuevaFechaPublicacion la nueva fecha de publicaciï¿½n del ï¿½lbum
+	 * @throws ParseException si el parï¿½metro <i>fechaPublicacion</i> no tiene 
 	 * el formato dd-MM-yyyy
 	 */
 	public void setFechaPublicacion(String nuevaFechaPublicacion) 
@@ -104,21 +104,21 @@ public class Album {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 		dateFormat.setLenient(false);
 		if (Utils.isStringNullOrEmptyOrWhitespace(nuevaFechaPublicacion)) {
-			throw new ParseException("Campo fecha de publicación vacío", 0);
+			throw new ParseException("Campo fecha de publicaciï¿½n vacï¿½o", 0);
 		}
 		this.fechaPublicacion = dateFormat.parse(nuevaFechaPublicacion);
 	}
 	
 	/**
-	 * Método que devuelve el número de ejemplares vendidos del álbum.
-	 * @return el número de ejemplares vendidos
+	 * Mï¿½todo que devuelve el nï¿½mero de ejemplares vendidos del ï¿½lbum.
+	 * @return el nï¿½mero de ejemplares vendidos
 	 */
 	public int getEjemplaresVendidos() {
 		return ejemplaresVendidos;
 	}
 	
 	/**
-	 * Método que cambia el número de ejemplares vendidos del álbum.
+	 * Mï¿½todo que cambia el nï¿½mero de ejemplares vendidos del ï¿½lbum.
 	 * @param nuevosEjemplaresVendidos el nuevo valor de los ejemplares vendidos
 	 */
 	public void setEjemplaresVendidos(int nuevosEjemplaresVendidos) {
@@ -127,34 +127,34 @@ public class Album {
 	
 	
 	/**
-	 * Método que devuelve una descripción textual breve del álbum.
-	 * @return la descripción textual breve del álbum
+	 * Mï¿½todo que devuelve una descripciï¿½n textual breve del ï¿½lbum.
+	 * @return la descripciï¿½n textual breve del ï¿½lbum
 	 */
 	String verDescripcionBreve() {
-		return "Título: " + titulo + "\n";
+		return "Tï¿½tulo: " + titulo + "\n";
 	}
 	
 	/**
-	 * Método que devuelve en una única cadena la información completa del álbum.
+	 * Mï¿½todo que devuelve en una ï¿½nica cadena la informaciï¿½n completa del ï¿½lbum.
 	 * 
-	 * @return la descripción completa del álbum
+	 * @return la descripciï¿½n completa del ï¿½lbum
 	 */
 	String verDescripcionCompleta() {
 		return "Id: " + idAlbum + 
-			"\tTítulo: " + titulo +
-			"\tFecha de publicación: " + fechaPublicacion +
+			"\tTÃ­tulo: " + titulo +
+			"\tFecha de publicaciÃ³n: " + fechaPublicacion +
 			"\tEjemplares vendidos: " + ejemplaresVendidos + "\n";
 	}
 	
 	/**
-	 * Método que añade un pista, y devuelve su identificador único.
-	 * @param nombre nombre de la pista a añadir
-	 * @param duracion duración de la pista a añadir
-	 * @return el identificador único de la pista añadira al álbum
+	 * Mï¿½todo que aï¿½ade un pista, y devuelve su identificador ï¿½nico.
+	 * @param nombre nombre de la pista a aï¿½adir
+	 * @param duracion duraciï¿½n de la pista a aï¿½adir
+	 * @return el identificador ï¿½nico de la pista aï¿½adira al ï¿½lbum
 	 */
 	public String anadirPista(String nombre, int duracion) {
 		// Crea un identificador para la pista, formado por una 'p' y un 
-		// número auto-incrementado
+		// nï¿½mero auto-incrementado
 		String idPista = "p" + ultimaPista;
 		// Crea el objeto
 		Pista p = new Pista(idPista, nombre, duracion);
@@ -167,11 +167,11 @@ public class Album {
 	}
 
 	/**
-	 * Método que comprueba si existe una pista identificada por un número único
+	 * Mï¿½todo que comprueba si existe una pista identificada por un nï¿½mero ï¿½nico
 	 * @param id identificador de la pista
 	 * @return objeto del tipo Pista correspondiente al identificador dado
 	 * @throws ExcepcionPistas si no existe una pista con un identificador
-	 * igual al valor del parámetro <i>id</i>
+	 * igual al valor del parï¿½metro <i>id</i>
 	 */
 	private Pista comprobarPistaExiste (String id) 
 		throws ExcepcionPistas {
@@ -184,10 +184,10 @@ public class Album {
 	}
 	
 	/**
-	 * Método que devuelve en una lista de cadenas la información de las 
+	 * Mï¿½todo que devuelve en una lista de cadenas la informaciï¿½n de las 
 	 * pistas.
 	 * @return la lista formada por cadenas de texto, donde cada una 
-	 * contiene la descripción de una pista
+	 * contiene la descripciï¿½n de una pista
 	 */
 	public List<String> verPistas() {
 		List<String> listado = new ArrayList<String>();
@@ -201,7 +201,7 @@ public class Album {
 	}
 	
 	/**
-	 * Método que devuelve las pistas en una lista de objetos 
+	 * Mï¿½todo que devuelve las pistas en una lista de objetos 
 	 * de tipo Pista.
 	 * @return la lista cuyos elementos son objetos del tipo Pista
 	 */
@@ -210,9 +210,9 @@ public class Album {
 	}
 	
 	/**
-	 * Método que permite ver la descripción textual de una pista de este álbum.
-	 * @param idPista el identificador único de la pista a mostrar
-	 * @return una cadena con la descripción de la pista
+	 * Mï¿½todo que permite ver la descripciï¿½n textual de una pista de este ï¿½lbum.
+	 * @param idPista el identificador ï¿½nico de la pista a mostrar
+	 * @return una cadena con la descripciï¿½n de la pista
 	 * @throws ExcepcionPistas si no existe la pista que se busca
 	 */
 	public String verPista(String idPista) throws ExcepcionPistas {
@@ -221,9 +221,9 @@ public class Album {
 	}
 	
 	/**
-	 * Método que permite obtener el objeto que representa a una pista dada
-	 * en este álbum
-	 * @param idPista el identificador único de la pista a recuperar
+	 * Mï¿½todo que permite obtener el objeto que representa a una pista dada
+	 * en este ï¿½lbum
+	 * @param idPista el identificador ï¿½nico de la pista a recuperar
 	 * @return un objeto de tipo Pista
 	 * @throws ExcepcionPistas si no existe la pista que se busca
 	 */
@@ -232,7 +232,7 @@ public class Album {
 	}
 
 	/**
-	 * Comprueba si el álbum tiene una pista con un nombre determinado.
+	 * Comprueba si el ï¿½lbum tiene una pista con un nombre determinado.
 	 * @param nombrePista nombre de la pista a buscar
 	 * @return valor booleano <i>true</i> si existe la pista buscada
 	 */
@@ -246,10 +246,10 @@ public class Album {
 	}
 	
 	/**
-	 * Método que elimina una pista.
-	 * @param idPista el identificador único de la pista a eliminar
+	 * Mï¿½todo que elimina una pista.
+	 * @param idPista el identificador ï¿½nico de la pista a eliminar
 	 * @throws ExcepcionPistas si no existe una pista con el idientificador que se 
-	 * ha pasado como parámetro
+	 * ha pasado como parï¿½metro
 	 */
 	public void eliminarPista(String idPista) throws ExcepcionPistas {
 		// Intenta borrar el objeto
