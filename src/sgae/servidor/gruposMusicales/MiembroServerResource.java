@@ -76,7 +76,7 @@ public class MiembroServerResource extends ServerResource{
 	}
 	
 	@Put("form-data")
-	public Representation añadircuenta (Representation datos) throws ParseException, ExcepcionPersonas, ResourceException{
+	public Representation annadircuenta (Representation datos) throws ParseException, ExcepcionPersonas, ResourceException{
 
 		Form form = new Form(datos);		
 		String DNI= this.personaID;

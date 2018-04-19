@@ -6,6 +6,7 @@ import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
 import sgae.nucleo.gruposMusicales.ControladorGruposMusicales;
+import sgae.nucleo.gruposMusicales.GrupoMusical;
 import sgae.servidor.aplicacion.SGAEaplicacion;
 import sgae.util.generated.GrupoInfoBreve;
 
@@ -21,8 +22,8 @@ public class GruposServerResource extends ServerResource{
 	@Get("txt")
 	public String represent(){
 		StringBuilder result = new StringBuilder();
-		for (String grupo: controladorGruposMusicales.listarGruposMusicales()) {
-			result.append((grupo == null) ? "" : grupo).append('\n');
+		for (GrupoMusical grupo: controladorGruposMusicales.recuperarGruposMusicales()) {
+			result.append((grupo == null) ? "" : "CIF: " + grupo.getCif() + "\tNombre: " + grupo.getNombre() + "\tURI: "+ grupo.getCif()+ "/\n").append('\n');
 		}
 		return result.toString();
 	}
@@ -41,7 +42,7 @@ public class GruposServerResource extends ServerResource{
 			grupoInfo.setCIF(g.getCif());
 			grupoInfo.setNombre(g.getNombre());
 			Link link = new Link();
-			link.setHref("/grupos/"+g.getCif());
+			link.setHref(g.getCif()+"/");
 			link.setTitle("Grupos");
 			link.setType("simple");
 			grupoInfo.setUri(link);

@@ -34,15 +34,15 @@ public class SGAEaplicacion extends Application{
 		controladorPersonas.crearPersona("00000000A", "Bart", "Simpson","01-04-2003");
 		controladorPersonas.crearPersona("11111111A", "Lisa", "Simpson","02-11-2006");
 		} catch (ParseException e) {
-			System.err.println("Alguna de las fechas proporcionadas no es válida.");
+			System.err.println("Alguna de las fechas proporcionadas no es vÃ¡lida.");
 		} catch (ExcepcionPersonas e) {
-			System.err.println("Ha fallado una operación para la persona con DNI " + 
-					e.getDniPersona() + " por la siguiente razón: " + 
+			System.err.println("Ha fallado una operaciÃ³n para la persona con DNI " + 
+					e.getDniPersona() + " por la siguiente razÃ³n: " + 
 					e.getCausaFallo());
 		}
 		try {
 
-			// Creación de grupos musicales
+			// Creaciï¿½n de grupos musicales
 			controladorGruposMusicales.crearGrupoMusical("D0123456D", "Jamiroquai", "02-04-1992");
 			controladorGruposMusicales.crearGrupoMusical("E0123456E", "Blur", "03-05-1988");
 			controladorGruposMusicales.crearAlbum("D0123456D", "Piloto", "02-05-1994", 3);
@@ -50,23 +50,23 @@ public class SGAEaplicacion extends Application{
 			
 
 		} catch (ExcepcionGruposMusicales e) {
-				System.err.println("Ha fallado una operación para la discográfica con CIF " + 
-						e.getCif() + " por la siguiente razón: " + 
+				System.err.println("Ha fallado una operaciÃ³n para la discogrÃ¡fica con CIF " + 
+						e.getCif() + " por la siguiente razÃ³n: " + 
 						e.getCausaFallo());
 			} catch (ParseException e) {
-				System.err.println("Alguna de las fechas proporcionadas no es válida.");
+				System.err.println("Alguna de las fechas proporcionadas no es vÃ¡lida.");
 		}
 		try {
-			// Creación de grupos musicales
+			// Creaciï¿½n de grupos musicales
 			controladorGruposMusicales.crearAlbum("D0123456D", "Ave Maria", "09-09-1999", 3);
 			controladorGruposMusicales.crearAlbum("E0123456E", "Piloto2", "02-02-1982", 5);
 
 		} catch (ExcepcionGruposMusicales e) {
-				System.err.println("Ha fallado una operación para la discográfica con CIF " + 
-						e.getCif() + " por la siguiente razón: " + 
+				System.err.println("Ha fallado una operaciÃ³n para la discogrÃ¡fica con CIF " + 
+						e.getCif() + " por la siguiente razÃ³n: " + 
 						e.getCausaFallo());
 			} catch (ParseException e) {
-				System.err.println("Alguna de las fechas proporcionadas no es válida.");
+				System.err.println("Alguna de las fechas proporcionadas no es vÃ¡lida.");
 		}
 		
 	try {
@@ -87,19 +87,12 @@ public class SGAEaplicacion extends Application{
 		router.attach("/",sistema.class);
 		router.attach("/personas/",PersonasServerResource.class);
 		router.attach("/personas/{DNI}",PersonaServerResource.class);
-//		router.attach("/discografias/",listapersonas.class);
-//		router.attach("/discografias/{CIF}/",listadiscografias.class);
-//		router.attach("/discografias/{CIF}/directores/",listadirectores.class);
-//		router.attach("/discografias/{CIF}/directores/{DNI}",directores.class);
-//		router.attach("/discografias/{CIF}/contratos/",listacontratos.class);
-//		router.attach("/discografias/{CIF}/contratos/{CIFgrupo}",contratos.class);
-//		router.attach("/discografias/{CIF}/masalaboral",masalaboral.class);
 		router.attach("/grupos/",GruposServerResource.class);
 		router.attach("/grupos/{CIFgrupo}/",GrupoServerResource.class);
 		router.attach("/grupos/{CIFgrupo}/albumes/",AlbumesServerResource.class);
 		router.attach("/grupos/{CIFgrupo}/albumes/{albumID}/",AlbumServerResource.class);
-//		router.attach("grupos/{CIFgrupo}/albumes/{albumID}/pistas/",listapistas.class);
-//		router.attach("grupos/{CIFgrupo}/albumes/{albumID}/pistas/{nombre}",pistas.class);
+//		router.attach("grupos/{CIFgrupo}/albumes/{albumID}/pistas/",PistasServerResource.class);
+//		router.attach("grupos/{CIFgrupo}/albumes/{albumID}/pistas/{nombre}",PistaServerResource.class);
 		router.attach("grupos/{CIFgrupo}/miembros/",MiembrosServerResource.class);
 		router.attach("grupos/{CIFgrupo}/miembros/{DNI}",MiembroServerResource.class);		
 		

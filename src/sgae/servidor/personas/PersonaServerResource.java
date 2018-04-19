@@ -99,10 +99,10 @@ public class PersonaServerResource extends ServerResource{
 			// Si se produce la excepcion significa que la persona ya existe --> el usuario quiere hacer un put de modificacion
 			 result =  new StringRepresentation("DNI: " + DNI +" Nombre: " + Nombre+" Apellidos: " + Apellidos+" Fecha de nacimiento:: " + fechanacimiento,   MediaType.TEXT_HTML);
 		} catch (ExcepcionPersonas ex){
-			System.out.println("ExcepcionPersonas crear");
+			System.out.println("ExcepcionPersonas crearPersona");
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}catch (ParseException ax) {
-			System.out.println("ParseException crear");
+			System.out.println("ParseException crearPersona");
 			 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
 

@@ -39,7 +39,7 @@ public class sistema extends ServerResource{
 	
 	@Get ("txt")
 	public String represent(){
-		String listas="Personas: /personas/ \nDiscografias: /discografias/ \nGrupos: /grupos/";	//Texto plano devuelto en el GET en Sistema
+		String listas="Personas: personas/ \nGrupos: grupos/";	//Texto plano devuelto en el GET en Sistema
 		return listas;
 	}
 	
@@ -56,27 +56,25 @@ public class sistema extends ServerResource{
 		
 		Node personasElt = doc.createElement("Personas");	//Nodo personas que contiene un elemento link
 		Element linkPersonas = doc.createElement("link");	//Elemento link --> 3 atributos (name, type and href)
-		sistemaElt.appendChild(personasElt);				//Añadimos a sistema su hijo personas	
-		personasElt.appendChild(linkPersonas);				//Añadimos a personas su hijo link
+		sistemaElt.appendChild(personasElt);				//Aï¿½adimos a sistema su hijo personas	
+		personasElt.appendChild(linkPersonas);				//Aï¿½adimos a personas su hijo link
 		linkPersonas.setAttribute("title", "Personas");		//Ponemos atributos
 		linkPersonas.setAttribute("type", "simple");
-		linkPersonas.setAttribute("href", "/personas/");
+		linkPersonas.setAttribute("href", "personas/");		
 		
-		
-		
-		Node discografiasElt = doc.createElement("Discografias");	//Repetimos el proceso anterior para discografias
-		Element linkDisco = doc.createElement("link");				
-		linkDisco.setAttribute("title", "Discografias");
-		linkDisco.setAttribute("type", "simple");
-		linkDisco.setAttribute("href", "/discografias/");
-		sistemaElt.appendChild(discografiasElt);
-		discografiasElt.appendChild(linkDisco);
+//		Node discografiasElt = doc.createElement("Discografias");	//Repetimos el proceso anterior para discografias
+//		Element linkDisco = doc.createElement("link");				
+//		linkDisco.setAttribute("title", "Discografias");
+//		linkDisco.setAttribute("type", "simple");
+//		linkDisco.setAttribute("href", "/discografias/");
+//		sistemaElt.appendChild(discografiasElt);
+//		discografiasElt.appendChild(linkDisco);
 
 		Node gruposElt = doc.createElement("Grupos");				//Repetimos el proceso grupos
 		Element linkGrupos = doc.createElement("link");			
 		linkGrupos.setAttribute("title", "Grupos");					
 		linkGrupos.setAttribute("type", "simple");
-		linkGrupos.setAttribute("href", "/grupos/");
+		linkGrupos.setAttribute("href", "grupos/");
 		sistemaElt.appendChild(gruposElt);
 		gruposElt.appendChild(linkGrupos);
 		
