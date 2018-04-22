@@ -56,7 +56,7 @@ public class AlbumesServerResource extends ServerResource{
 	}
 	
 	@Override
-	protected Representation get(Variant variant) throws ResourceException {
+	protected Representation get(Variant variant){
 		Representation result = null;
 		StringBuilder result2 = new StringBuilder();
 	if (MediaType.TEXT_PLAIN.isCompatible(variant.getMediaType())) {		
@@ -126,7 +126,6 @@ public class AlbumesServerResource extends ServerResource{
 		 
 		try {
 			controladorGruposMusicales.crearAlbum(CIF, titulo, fechaPublicacion, ejemplaresVendidos);
-			// Si se produce la expcion significa que la persona ya existe --> el usuario quiere hacer un put de modificacion
 			 result =  new StringRepresentation("CIF: " + CIF +" Título: " + titulo+" Fecha de publicación: " + fechaPublicacion+" Número de ejemplares vendidos: " + ejemplaresVendidos,   MediaType.TEXT_HTML);
 		}catch (ParseException ax) {
 			System.out.println("ParseException CrearAlbum");

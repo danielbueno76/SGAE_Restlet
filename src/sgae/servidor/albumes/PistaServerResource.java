@@ -49,7 +49,7 @@ public class PistaServerResource extends ServerResource{
 	}
 	
 	@Override
-	protected Representation get(Variant variant) throws ResourceException {
+	protected Representation get(Variant variant){
 		Representation result = null;
 
 		if (MediaType.TEXT_PLAIN.isCompatible(variant.getMediaType())) {
@@ -101,43 +101,12 @@ public class PistaServerResource extends ServerResource{
 		}
 		
 		return result;
-	}
-	
-	@Put("form")
-	public Representation anadirPista (Representation datos) throws ExcepcionAlbumes, ExcepcionGruposMusicales{
-
-		Form form = new Form(datos);		
-		String CIF= this.grupoID;
-		String idAlbum = this.idAlbum;
-		String Nombre= form.getFirstValue("NOMBRE");
-		String Duracion= form.getFirstValue("DURACION");
-		int duracion = Integer.parseInt(Duracion);
-
-		System.out.println("CIF: " + CIF );
-		System.out.println("Album: " + idAlbum );
-		System.out.println("Nombre: " + Nombre);
-		System.out.println("Duracion: " + duracion);
-		Representation result = null;
-		 
-		try {
-			controladorGruposMusicales.anadirPista(CIF, idAlbum, Nombre, duracion);// Si se produce la expcion significa que la persona ya existe --> el usuario quiere hacer un put de modificacion
-			 result =  new StringRepresentation("CIF: " + CIF +" Album: " + idAlbum+" Nombre: " + Nombre +"Duracion: "+Duracion,   MediaType.TEXT_HTML);
-		} catch (ExcepcionAlbumes ex){
-			System.out.println("ExcepcionAlbumes Crearpista");
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-			
-		}catch (ExcepcionGruposMusicales ax) {
-			System.out.println("ExcepcionGruposMusicales Crearpista");
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-		}
-
-		return result;
 		
 	}
 	
 	
 	@Delete
-	public void remove () throws ExcepcionGruposMusicales, ExcepcionAlbumes, ExcepcionPistas{	
+	public void remove (){	
 	
 		
 		try {
