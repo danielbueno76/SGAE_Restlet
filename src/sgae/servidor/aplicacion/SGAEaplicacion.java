@@ -5,12 +5,15 @@ import org.restlet.Application;
 import org.restlet.Restlet;
 import org.restlet.routing.Router;
 import sgae.nucleo.gruposMusicales.ControladorGruposMusicales;
+import sgae.nucleo.gruposMusicales.ExcepcionAlbumes;
 import sgae.nucleo.gruposMusicales.ExcepcionGruposMusicales;
 import sgae.nucleo.personas.ControladorPersonas;
 import sgae.nucleo.personas.ExcepcionPersonas;
 import sgae.nucleo.personas.InterfazControladorPersonas;
 import sgae.servidor.albumes.AlbumServerResource;
 import sgae.servidor.albumes.AlbumesServerResource;
+import sgae.servidor.albumes.PistaServerResource;
+import sgae.servidor.albumes.PistasServerResource;
 import sgae.servidor.gruposMusicales.GrupoServerResource;
 import sgae.servidor.gruposMusicales.GruposServerResource;
 import sgae.servidor.gruposMusicales.MiembroServerResource;
@@ -42,7 +45,7 @@ public class SGAEaplicacion extends Application{
 		}
 		try {
 
-			// Creaci�n de grupos musicales
+			// Creación de grupos musicales
 			controladorGruposMusicales.crearGrupoMusical("D0123456D", "Jamiroquai", "02-04-1992");
 			controladorGruposMusicales.crearGrupoMusical("E0123456E", "Blur", "03-05-1988");
 			controladorGruposMusicales.crearAlbum("D0123456D", "Piloto", "02-05-1994", 3);
@@ -57,7 +60,7 @@ public class SGAEaplicacion extends Application{
 				System.err.println("Alguna de las fechas proporcionadas no es válida.");
 		}
 		try {
-			// Creaci�n de grupos musicales
+			// Creación de grupos musicales
 			controladorGruposMusicales.crearAlbum("D0123456D", "Ave Maria", "09-09-1999", 3);
 			controladorGruposMusicales.crearAlbum("E0123456E", "Piloto2", "02-02-1982", 5);
 
@@ -69,15 +72,28 @@ public class SGAEaplicacion extends Application{
 				System.err.println("Alguna de las fechas proporcionadas no es válida.");
 		}
 		
-	try {
-		controladorGruposMusicales.anadirMiembro("D0123456D", "00000000A");
-	} catch (ExcepcionGruposMusicales e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (ExcepcionPersonas e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+		try {
+			controladorGruposMusicales.anadirMiembro("D0123456D", "00000000A");
+		} catch (ExcepcionGruposMusicales e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExcepcionPersonas e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {			//Añadir pista
+			controladorGruposMusicales.anadirPista("D0123456D", "a1", "pistanumero1", 300);
+			controladorGruposMusicales.anadirPista("D0123456D", "a1", "pistanumero2", 600);
+		}
+		
+		catch(ExcepcionGruposMusicales e) {
+			
+		}
+		catch(ExcepcionAlbumes a) {
+					
+		}
+		
 	}
 	
 	
@@ -91,8 +107,8 @@ public class SGAEaplicacion extends Application{
 		router.attach("/grupos/{CIFgrupo}/",GrupoServerResource.class);
 		router.attach("/grupos/{CIFgrupo}/albumes/",AlbumesServerResource.class);
 		router.attach("/grupos/{CIFgrupo}/albumes/{albumID}/",AlbumServerResource.class);
-//		router.attach("grupos/{CIFgrupo}/albumes/{albumID}/pistas/",PistasServerResource.class);
-//		router.attach("grupos/{CIFgrupo}/albumes/{albumID}/pistas/{nombre}",PistaServerResource.class);
+		router.attach("grupos/{CIFgrupo}/albumes/{albumID}/pistas/",PistasServerResource.class);
+		router.attach("grupos/{CIFgrupo}/albumes/{albumID}/pistas/{idPista}",PistaServerResource.class);
 		router.attach("grupos/{CIFgrupo}/miembros/",MiembrosServerResource.class);
 		router.attach("grupos/{CIFgrupo}/miembros/{DNI}",MiembroServerResource.class);		
 		
