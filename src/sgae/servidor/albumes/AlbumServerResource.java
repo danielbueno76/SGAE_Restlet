@@ -38,6 +38,7 @@ import sgae.util.generated.Link;
 
 public class AlbumServerResource extends ServerResource{
 	
+	//Inicializamos las variables y controladores necesarios para Album
 	SGAEaplicacion ref = (SGAEaplicacion)getApplication();
 	ControladorGruposMusicales controladorGruposMusicales = ref.getControladorGruposMusicales();
 	private String grupoID;
@@ -45,7 +46,7 @@ public class AlbumServerResource extends ServerResource{
 	
 	@Override
 	protected void doInit() throws ResourceException {
-		getVariants().add(new Variant(MediaType.TEXT_PLAIN));
+		getVariants().add(new Variant(MediaType.TEXT_PLAIN));	//Añadimos los formatos que se van a poder negociar y cogemos los datos de la URI
 		getVariants().add(new Variant(MediaType.TEXT_HTML));
 		this.grupoID = getAttribute("CIFgrupo");
 		this.albumID = getAttribute("albumID");
@@ -56,7 +57,7 @@ public class AlbumServerResource extends ServerResource{
 	protected Representation get(Variant variant) throws ResourceException {
 		Representation result = null;
 
-	if (MediaType.TEXT_PLAIN.isCompatible(variant.getMediaType())) {
+	if (MediaType.TEXT_PLAIN.isCompatible(variant.getMediaType())) {		//Representacion para texto plano
 		
 		try {
 			result = new StringRepresentation(controladorGruposMusicales.verAlbum(grupoID, albumID)+"\tURI: pistas/");
@@ -69,7 +70,7 @@ public class AlbumServerResource extends ServerResource{
 		}
 	}
 	
-	else if (MediaType.TEXT_HTML.isCompatible(variant.getMediaType())) {
+	else if (MediaType.TEXT_HTML.isCompatible(variant.getMediaType())) { 	//Representacion para HTML
 
 		Map<String, Object> albumDataModel = new HashMap<String, Object>();
 		
@@ -87,7 +88,7 @@ public class AlbumServerResource extends ServerResource{
 							return new TemplateRepresentation(albumesVtl, albumDataModel, MediaType.TEXT_HTML);
 				} catch (IOException e) {
 					
-				} catch (ExcepcionAlbumes e) {
+				} catch (ExcepcionAlbumes e) {		//Excepciones de recuperarAlbum
 					System.out.println("ExcepcionAlbumes No existe el album");
 					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 				} catch (ExcepcionGruposMusicales e) {
@@ -100,10 +101,10 @@ public class AlbumServerResource extends ServerResource{
 		return result;
 	}
 	
-	@Put("form-data")
+	@Put("form-data")			//Funcion put para modificar alguno de los datos previamente introducidos de album
 	public Representation anadiralbum (Representation datos){
 
-		Form form = new Form(datos);		
+		Form form = new Form(datos);			//Capturamos los datos de la cabecera
 		String CIF= this.grupoID;
 		String titulo= form.getFirstValue("TITULO");
 		String fechaPublicacion= form.getFirstValue("FECHAPUBLICACION");
@@ -116,11 +117,11 @@ public class AlbumServerResource extends ServerResource{
 		 Representation result = null;
 		 
 		try {
-			controladorGruposMusicales.modificarAlbum(CIF, this.albumID ,titulo, fechaPublicacion, ejemplaresVendidos);
+			controladorGruposMusicales.modificarAlbum(CIF, this.albumID ,titulo, fechaPublicacion, ejemplaresVendidos);				//Modificamos los datos
 			// Si se produce la expcion significa que la persona ya existe --> el usuario quiere hacer un put de modificacion
 			 result =  new StringRepresentation("CIF: " + CIF +" Titulo: " + titulo+" Fecha de publicacion: " + fechaPublicacion+" Numero de ejemplares vendidos: " + ejemplaresVendidos,   MediaType.TEXT_HTML);
 		}catch (ParseException ax) {
-			System.out.println("ParseException Modificar Album");
+			System.out.println("ParseException Modificar Album");				//Controlamos las posibles excepciones que se pueden producir
 			 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
 		catch (ExcepcionGruposMusicales ax) {
@@ -137,7 +138,7 @@ public class AlbumServerResource extends ServerResource{
 	}
 	
 	@Delete
-	public void remove(){
+	public void remove(){			//Funcion delete para borrar un album del sistema
 		
 		try {
 		controladorGruposMusicales.borrarAlbum(this.grupoID, this.albumID);

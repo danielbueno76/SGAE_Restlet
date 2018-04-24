@@ -43,42 +43,43 @@ import sgae.util.generated.Link;
 
 public class AlbumesServerResource extends ServerResource{
 	
+	//Inicializamos las variables y controladores necesarios para Albumes
 	SGAEaplicacion ref = (SGAEaplicacion)getApplication();
 	ControladorGruposMusicales controladorGruposMusicales = ref.getControladorGruposMusicales();
 	private String grupoID;
 	
 	@Override
-	protected void doInit() throws ResourceException {
-		getVariants().add(new Variant(MediaType.TEXT_PLAIN));
+	protected void doInit() throws ResourceException {		
+		getVariants().add(new Variant(MediaType.TEXT_PLAIN));	//Añadimos los formatos que se van a poder negociar 
 		getVariants().add(new Variant(MediaType.TEXT_HTML));
-		this.grupoID = getAttribute("CIFgrupo");
+		this.grupoID = getAttribute("CIFgrupo");				//Sacamos el identificador del grupo de la URI
 		
 	}
 	
 	@Override
-	protected Representation get(Variant variant){
+	protected Representation get(Variant variant){		//Metodo   get sobre albumes con negociacion de contenido
 		Representation result = null;
 		StringBuilder result2 = new StringBuilder();
-	if (MediaType.TEXT_PLAIN.isCompatible(variant.getMediaType())) {		
+	if (MediaType.TEXT_PLAIN.isCompatible(variant.getMediaType())) {		//Peticion de formato plano	
 		try {
-			for (Album album: controladorGruposMusicales.recuperarAlbumes(grupoID)) {
+			for (Album album: controladorGruposMusicales.recuperarAlbumes(grupoID)) {		//Mostramos la información breve de cada album y el URI relativo para el siguiente elemento
 				result2.append((album == null) ? "" : "Título: " + album.getTitulo() + "\tUri: " + album.getId()+"/").append('\n');
 			}
-		} catch (ExcepcionGruposMusicales e) {
-			System.out.println("ExcepcionGruposMusicales No existe el grupo");
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		} catch (ExcepcionGruposMusicales e) {		//Capturamos los posibles fallos que se puede dar
+			System.out.println("ExcepcionGruposMusicales No existe el grupo");	//No existe el grupo solicitado
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);		//Se devuelve un error --> BAD REQUEST
 		}
-		result = new StringRepresentation(result2.toString());
+		result = new StringRepresentation(result2.toString());			//Devolvemos la representacion
 	}
 	
-	else if (MediaType.TEXT_HTML.isCompatible(variant.getMediaType())) {
+	else if (MediaType.TEXT_HTML.isCompatible(variant.getMediaType())) {		//Mismo proceso por en formato HTML
 		Albumes albumesHTML = new Albumes();	//XML
 		final List<AlbumInfoBreve> albumesInfoBreve= albumesHTML.getAlbumInfoBreve();
 		Map<String, Object> albumDataModel = new HashMap<String, Object>();
 		
 
 			try {
-				for(sgae.nucleo.gruposMusicales.Album a: controladorGruposMusicales.recuperarAlbumes(this.grupoID) ) {
+				for(sgae.nucleo.gruposMusicales.Album a: controladorGruposMusicales.recuperarAlbumes(this.grupoID) ) {		//Recorremos todos los posibles albumes que se encuentran en el sistema
 				
 				AlbumInfoBreve albumInfo = new AlbumInfoBreve();	
 				albumInfo.setTitulo(a.getTitulo());
@@ -95,7 +96,7 @@ public class AlbumesServerResource extends ServerResource{
 						// Wrap bean with Velocity representation
 						return new TemplateRepresentation(albumesVtl, albumDataModel, MediaType.TEXT_HTML);
 
-			} catch (IOException e) {
+			} catch (IOException e) {					//Capturamos posibles excepciones
 				System.out.println("IOException GET HTML AlbumesServerResource");
 				//throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 			} catch (ExcepcionGruposMusicales e) {
@@ -109,10 +110,10 @@ public class AlbumesServerResource extends ServerResource{
 		return result;
 	}
 	
-	@Post("form")
+	@Post("form")				//Post para añadir nuevos albumes sin poder escoger el identificador
 	public Representation anadiralbum (Representation datos) {
 
-		Form form = new Form(datos);		
+		Form form = new Form(datos);		//Cogemos los datos recibidos en la cabecera del mensaje
 		String CIF= this.grupoID;
 		String titulo= form.getFirstValue("TITULO");
 		String fechaPublicacion= form.getFirstValue("FECHAPUBLICACION");
@@ -125,7 +126,7 @@ public class AlbumesServerResource extends ServerResource{
 		 Representation result = null;
 		 
 		try {
-			controladorGruposMusicales.crearAlbum(CIF, titulo, fechaPublicacion, ejemplaresVendidos);
+			controladorGruposMusicales.crearAlbum(CIF, titulo, fechaPublicacion, ejemplaresVendidos);		//Creamos el album con la información necesaria
 			 result =  new StringRepresentation("CIF: " + CIF +" Título: " + titulo+" Fecha de publicación: " + fechaPublicacion+" Número de ejemplares vendidos: " + ejemplaresVendidos,   MediaType.TEXT_HTML);
 		}catch (ParseException ax) {
 			System.out.println("ParseException CrearAlbum");
