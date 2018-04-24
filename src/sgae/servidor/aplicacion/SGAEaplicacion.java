@@ -16,7 +16,6 @@ import sgae.servidor.albumes.PistaServerResource;
 import sgae.servidor.albumes.PistasServerResource;
 import sgae.servidor.gruposMusicales.GrupoServerResource;
 import sgae.servidor.gruposMusicales.GruposServerResource;
-import sgae.servidor.gruposMusicales.MiembroServerResource;
 import sgae.servidor.gruposMusicales.MiembrosServerResource;
 import sgae.servidor.personas.PersonaServerResource;
 import sgae.servidor.personas.PersonasServerResource;
@@ -63,17 +62,24 @@ public class SGAEaplicacion extends Application{
 			// Creación de grupos musicales
 			controladorGruposMusicales.crearAlbum("D0123456D", "Ave Maria", "09-09-1999", 3);
 			controladorGruposMusicales.crearAlbum("E0123456E", "Piloto2", "02-02-1982", 5);
-
+			controladorGruposMusicales.anadirPista("D0123456D", "a0", "PistaHielo", 6);
+			controladorGruposMusicales.anadirPista("D0123456D", "a1", "PistaFuego", 5);
 		} catch (ExcepcionGruposMusicales e) {
 				System.err.println("Ha fallado una operación para la discográfica con CIF " + 
 						e.getCif() + " por la siguiente razón: " + 
 						e.getCausaFallo());
 			} catch (ParseException e) {
 				System.err.println("Alguna de las fechas proporcionadas no es válida.");
-		}
+		} catch (ExcepcionAlbumes e) {
+			System.err.println("Error al crear pistas porque no existe el album.");
+			}
 		
 		try {
 			controladorGruposMusicales.anadirMiembro("D0123456D", "00000000A");
+			controladorGruposMusicales.anadirMiembro("D0123456D", "11111111A");
+			controladorGruposMusicales.anadirMiembro("E0123456E", "00000000A");
+			controladorGruposMusicales.anadirMiembro("E0123456E", "11111111A");
+			controladorGruposMusicales.eliminarMiembro("D0123456D", "00000000A");
 		} catch (ExcepcionGruposMusicales e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -81,19 +87,6 @@ public class SGAEaplicacion extends Application{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		try {			//Añadir pista
-			controladorGruposMusicales.anadirPista("D0123456D", "a1", "pistanumero1", 300);
-			controladorGruposMusicales.anadirPista("D0123456D", "a1", "pistanumero2", 600);
-		}
-		
-		catch(ExcepcionGruposMusicales e) {
-			
-		}
-		catch(ExcepcionAlbumes a) {
-					
-		}
-		
 	}
 	
 	
@@ -107,11 +100,10 @@ public class SGAEaplicacion extends Application{
 		router.attach("/grupos/{CIFgrupo}/",GrupoServerResource.class);
 		router.attach("/grupos/{CIFgrupo}/albumes/",AlbumesServerResource.class);
 		router.attach("/grupos/{CIFgrupo}/albumes/{albumID}/",AlbumServerResource.class);
-		router.attach("grupos/{CIFgrupo}/albumes/{albumID}/pistas/",PistasServerResource.class);
-		router.attach("grupos/{CIFgrupo}/albumes/{albumID}/pistas/{idPista}",PistaServerResource.class);
-		router.attach("grupos/{CIFgrupo}/miembros/",MiembrosServerResource.class);
-		router.attach("grupos/{CIFgrupo}/miembros/{DNI}",MiembroServerResource.class);		
-		
+		router.attach("/grupos/{CIFgrupo}/albumes/{albumID}/pistas/",PistasServerResource.class);
+		router.attach("/grupos/{CIFgrupo}/albumes/{albumID}/pistas/{nombre}",PistaServerResource.class);
+		router.attach("/grupos/{CIFgrupo}/miembros",MiembrosServerResource.class);
+		//router.attach("/grupos/{CIFgrupo}/miembros/../../../personas/{DNI}",MiembroServerResource.class);		
 		return router;
 	}
 	

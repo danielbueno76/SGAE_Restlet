@@ -17,6 +17,7 @@ import sgae.nucleo.gruposMusicales.ControladorGruposMusicales;
 import sgae.nucleo.gruposMusicales.ExcepcionGruposMusicales;
 import sgae.nucleo.gruposMusicales.GrupoMusical;
 import sgae.nucleo.personas.ExcepcionPersonas;
+import sgae.nucleo.personas.Persona;
 import sgae.servidor.aplicacion.SGAEaplicacion;
 
 public class GrupoServerResource extends ServerResource{
@@ -69,28 +70,103 @@ public class GrupoServerResource extends ServerResource{
 	
 	@Put("form-data")
 	public Representation annadirGrupo (Representation datos){
-
-		Form form = new Form(datos);		
-		String CIF= this.grupoID;
-		String Nombre= form.getFirstValue("NOMBRE");
-		String FechaCreacion= form.getFirstValue("FECHACREACION");
-
-		System.out.println("CIF: " + CIF );
-		System.out.println("Nombre: " + Nombre);
-		System.out.println("Fecha de creacion: " + FechaCreacion);
 		Representation result = null;
-		 
-		try {
-			controladorGruposMusicales.crearGrupoMusical(CIF, Nombre, FechaCreacion);// Si se produce la expcion significa que la persona ya existe --> el usuario quiere hacer un put de modificacion
-			 result =  new StringRepresentation("CIF: " + CIF +"\tNombre: " + Nombre+"\tFecha de creacion: " + FechaCreacion,   MediaType.TEXT_HTML);
-		} catch (ExcepcionGruposMusicales ex){
-			System.out.println("No se puede modficar un grupo ya creado");
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		Form form = new Form(datos);	
+		String CIF= this.grupoID;
+		String DNI= form.getValues("DNI");
+		//Si DNI es nulo significa que queremos añadir un grupo
+		if (DNI==null) {
 			
-		}catch (ParseException ax) {
-			System.out.println("ParseException creargrupo");
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			String Nombre= form.getFirstValue("NOMBRE");
+			String FechaCreacion= form.getFirstValue("FECHACREACION");
+			System.out.println("CIF: " + CIF );
+			System.out.println("Nombre: " + Nombre);
+			System.out.println("Fecha de creacion: " + FechaCreacion);
+			
+			 
+			try {
+				controladorGruposMusicales.crearGrupoMusical(CIF, Nombre, FechaCreacion);// Si se produce la expcion significa que la persona ya existe --> el usuario quiere hacer un put de modificacion
+				 result =  new StringRepresentation("CIF: " + CIF +"\tNombre: " + Nombre+"\tFecha de creacion: " + FechaCreacion,   MediaType.APPLICATION_WWW_FORM);
+			} catch (ExcepcionGruposMusicales ex){
+				System.out.println("No se puede modficar un grupo ya creado");
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+				
+			}catch (ParseException ax) {
+				System.out.println("ParseException creargrupo");
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			}
 		}
+		else {
+			String[] arrayDNIs = DNI.split(",");
+			System.out.print("DNIs: ");
+			int i=0;
+			for(i=0;i<arrayDNIs.length;i++) {
+				System.out.print(arrayDNIs[i] + ",\t");//Mostrar DNIs
+			}
+			System.out.println("\nCIF grupo: " + CIF);
+
+			try {
+				StringBuilder result2 = new StringBuilder();
+				if (controladorGruposMusicales.recuperarMiembros(grupoID).isEmpty()) {
+					//Significa que no existen miembros actuales para ese grupo.
+					for(i=0;i<arrayDNIs.length;i++) {
+						//Significa que ese DNI no está incluido como miembro actual
+						controladorGruposMusicales.anadirMiembro(CIF, arrayDNIs[i]);
+						result2.append("Se añade un miembro con DNI: " + arrayDNIs[i] +" al grupo con CIF: " + CIF).append('\n');
+					}
+					result = new StringRepresentation(result2.toString());
+				}
+				else {
+					if(controladorGruposMusicales.recuperarMiembros(grupoID).size()>arrayDNIs.length) {
+						//significa que quieres borrar un miembro
+						for (Persona persona: controladorGruposMusicales.recuperarMiembros(grupoID)) {
+							for(i=0;i<arrayDNIs.length;i++) {
+	
+								if(persona.getDni().equals(arrayDNIs[i])==false) {
+									//Significa que hay que borrar ese miembro
+									controladorGruposMusicales.eliminarMiembro(CIF, persona.getDni());
+									result2.append("Se elimina un miembro con DNI: " + persona.getDni() +" del grupo con CIF: " + CIF).append('\n');
+									
+								}
+								else {
+									result2.append("El miembro con DNI: " + arrayDNIs[i] +" del grupo con CIF: " + CIF + " se mantiene como miembro actual").append('\n');
+								}
+							}
+						}
+						
+					}
+					else {
+						//Significa que queremos añadir un miembro.
+						for (Persona persona: controladorGruposMusicales.recuperarMiembros(grupoID)) {
+							for(i=0;i<arrayDNIs.length;i++) {
+	
+								if(persona.getDni().equals(arrayDNIs[i])==false) {
+									//Significa que ese DNI no está incluido como miembro actual
+									controladorGruposMusicales.anadirMiembro(CIF, arrayDNIs[i]);
+									result2.append("Se añade un miembro con DNI: " + arrayDNIs[i] +" al grupo con CIF: " + CIF).append('\n');
+									
+								}
+								else {
+									result2.append("El miembro con DNI: " + arrayDNIs[i] +" del grupo con CIF: " + CIF + " ya pertenece a los miembros actuales").append('\n');
+								}
+							}
+						}
+					}
+
+					result = new StringRepresentation(result2.toString());
+				}
+
+			}
+			catch (ExcepcionPersonas ex){
+				System.out.println("ExcepcionPersonas añadir Miembro");
+				 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			}catch (ExcepcionGruposMusicales e) {
+				System.out.println("ExcepcionGruposMusicales añadir Miembro");
+				 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			}
+
+		}
+
 
 		return result;
 		
@@ -107,7 +183,30 @@ public class GrupoServerResource extends ServerResource{
 		{
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
-	}
+	}	
+
+//	
+//	@Delete("form-data")
+//	public Representation remove(Representation datos){
+//		Representation result = null;		
+//		Form form = new Form(datos);	
+//		String DNI= form.getFirstValue("DNI");
+//		try {
+//			
+//			controladorGruposMusicales.eliminarMiembro(grupoID, DNI);
+//			 result =  new StringRepresentation("Se elimina un miembro con DNI: " + DNI +" al grupo con CIF: " + this.grupoID,   MediaType.APPLICATION_WWW_FORM);
+//				
+//		} catch (ExcepcionPersonas ex){
+//			System.out.println("ExcepcionPersonas borrar Miembro");
+//			 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+//		}catch (ExcepcionGruposMusicales e) {
+//			System.out.println("ExcepcionGruposMusicales borrar Miembro");
+//			 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+//		}
+//		return result;
+//		
+//		
+//	}
 
 
 }

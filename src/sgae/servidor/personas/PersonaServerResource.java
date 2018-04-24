@@ -97,7 +97,7 @@ public class PersonaServerResource extends ServerResource{
 		try {
 			controladorPersonas.crearPersona(DNI, Nombre, Apellidos, fechanacimiento); 
 			// Si se produce la excepcion significa que la persona ya existe --> el usuario quiere hacer un put de modificacion
-			 result =  new StringRepresentation("DNI: " + DNI +" Nombre: " + Nombre+" Apellidos: " + Apellidos+" Fecha de nacimiento:: " + fechanacimiento,   MediaType.TEXT_HTML);
+			 result =  new StringRepresentation("DNI: " + DNI +" Nombre: " + Nombre+" Apellidos: " + Apellidos+" Fecha de nacimiento:: " + fechanacimiento,   MediaType.APPLICATION_WWW_FORM);
 		} catch (ExcepcionPersonas ex){
 			System.out.println("ExcepcionPersonas crearPersona");
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
