@@ -1,7 +1,5 @@
 package sgae.nucleo.gruposMusicales;
 
-import sgae.util.Utils;
-
 /**
  * Clase que almacena información sobre las pistas de un álbum.
  * @author Manuel Rodríguez Cayetano. ETSIT UVa.
@@ -28,8 +26,8 @@ public class Pista {
 	public Pista(String idPista, String nombre, int duracion) {
 		super();
 		// Asigna campos básicos
-		this.idPista = Utils.testStringNullOrEmptyOrWhitespaceAndSet(idPista, "Campo idPista vacío");
-		this.nombre = Utils.testStringNullOrEmptyOrWhitespaceAndSet(nombre, "Campo nombre vacío");
+		this.idPista = idPista;
+		this.nombre = nombre;
 		this.duracion = duracion;
 	}
 
@@ -59,7 +57,7 @@ public class Pista {
 	 *            el nuevo nombre de la pista
 	 */
 	public void setNombre(String nuevoNombre) {
-		this.nombre = Utils.testStringNullOrEmptyOrWhitespaceAndSet(nuevoNombre, "Campo nombre vacío");
+		nombre = nuevoNombre;
 	}
 
 	/**

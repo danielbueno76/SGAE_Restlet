@@ -12,7 +12,7 @@ public class HelloClient {
 		//Cretae local proxy to resource
 		ClientResource helloClientResource = new ClientResource ("http://localhost:8111/123456789A");
 		
-		//El cliente deber√°:
+		//El cliente deber·:
 		
 		//Crear una persona
 		Form f = new Form();

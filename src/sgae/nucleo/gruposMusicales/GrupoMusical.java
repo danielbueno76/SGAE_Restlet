@@ -8,12 +8,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import sgae.nucleo.personas.Persona;
-import sgae.util.Utils;
 import sgae.nucleo.personas.ExcepcionPersonas;
 
 /**
- * Clase que almacena informaciï¿½n sobre los grupos musicales.
- * @author Manuel Rodrï¿½guez Cayetano. ETSIT UVa.
+ * Clase que almacena información sobre los grupos musicales.
+ * @author Manuel Rodríguez Cayetano. ETSIT UVa.
  * @version 1.0
  */
 public class GrupoMusical {
@@ -35,42 +34,39 @@ public class GrupoMusical {
 	 */
 	private Map<String, Persona> listaMiembrosAnteriores;
 	/**
-	 * Mapa indexado por identificador con la lista de ï¿½lbumes (hacemos que esta
+	 * Mapa indexado por identificador con la lista de álbumes (hacemos que esta
 	 * clase mantenga la persistencia de esta lista)
 	 */
 	private Map<String, Album> listaAlbumes;
-	/** Un contador para generar identificadores ï¿½nicos de ï¿½lbumes */
+	/** Un contador para generar identificadores únicos de álbumes */
 	private int ultimoAlbum;
 
 	/**
-	 * Constructor con los campos bï¿½sicos.
+	 * Constructor con los campos básicos.
 	 * @param cif el identificador del grupo musical
 	 * @param nombre el nombre del grupo
-	 * @param fechaCreacion fecha de creaciï¿½n del grupo
-	 * @throws ParseException si el parï¿½metro <i>fechaCreacion</i> no tiene 
+	 * @param fechaCreacion fecha de creación del grupo
+	 * @throws ParseException si el parámetro <i>fechaCreacion</i> no tiene 
 	 * el formato dd-MM-yyyy
 	 */
 	public GrupoMusical(String cif, String nombre, String fechaCreacion)
 		throws ParseException {
 		super();
-		this.cif = Utils.testStringNullOrEmptyOrWhitespaceAndSet(cif, "Campo CIF vacï¿½o");
-		this.nombre = Utils.testStringNullOrEmptyOrWhitespaceAndSet(nombre, "Campo nombre vacï¿½o");
+		this.cif = cif;
+		this.nombre = nombre;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 		dateFormat.setLenient(false);
-		if (Utils.isStringNullOrEmptyOrWhitespace(fechaCreacion)) {
-			throw new ParseException("Campo fecha de creaciï¿½n vacï¿½o", 0);
-		}
 		this.fechaCreacion = dateFormat.parse(fechaCreacion);
 		contratado = false;
 		listaMiembrosActuales = new HashMap<String, Persona>();
 		listaMiembrosAnteriores = new HashMap<String, Persona>();
-		// Inicializa la lista de ï¿½lbumes
+		// Inicializa la lista de álbumes
 		listaAlbumes = new HashMap<String, Album>();
 		ultimoAlbum = 0;
 	}
 
 	/**
-	 * Mï¿½todo que permite leer el CIF.
+	 * Método que permite leer el CIF.
 	 * NOTA: el CIF no se puede cambiar.
 	 * @return el valor del CIF del grupo musical
 	 */
@@ -79,7 +75,7 @@ public class GrupoMusical {
 	}
 	
 	/**
-	 * Mï¿½todo que permite leer el nombre.
+	 * Método que permite leer el nombre.
 	 * @return el nombre del grupo musical
 	 */
 	public String getNombre() {
@@ -87,91 +83,88 @@ public class GrupoMusical {
 	}
 	
 	/**
-	 * Mï¿½todo que permite cambiar el nombre.
+	 * Método que permite cambiar el nombre.
 	 * @param nombre el nuevo nombre del grupo musical
 	 */
  	public void setNombre(String nombre) {
-		this.nombre = Utils.testStringNullOrEmptyOrWhitespaceAndSet(nombre, "Campo nombre vacï¿½o");
+		this.nombre = nombre;
 	}
 
 	/**
-	 * Mï¿½todo que permite leer la fecha de creaciï¿½n.
-	 * @return la fecha de creaciï¿½n del grupo musical
+	 * Método que permite leer la fecha de creación.
+	 * @return la fecha de creación del grupo musical
 	 */
 	public String getFechaCreacion() {
 		return new SimpleDateFormat("dd-MM-yyyy").format(fechaCreacion);
 	}
 
 	/**
-	 * Mï¿½todo que permite cambiar la fecha de creaciï¿½n.
-	 * @param fechaCreacion la nueva fecha de creaciï¿½n del grupo musical
-	 * @throws ParseException si el parï¿½metro <i>fechaCreacion</i> no tiene 
+	 * Método que permite cambiar la fecha de creación.
+	 * @param fechaCreacion la nueva fecha de creación del grupo musical
+	 * @throws ParseException si el parámetro <i>fechaCreacion</i> no tiene 
 	 * el formato dd-MM-yyyy
 	 */
  	public void setFechaCreacion(String fechaCreacion) throws ParseException {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 		dateFormat.setLenient(false);
-		if (Utils.isStringNullOrEmptyOrWhitespace(fechaCreacion)) {
-			throw new ParseException("Campo fecha de creaciï¿½n vacï¿½o", 0);
-		}
 		this.fechaCreacion = dateFormat.parse(fechaCreacion);
 	}
 
 	/** 
-	 * Mï¿½todo que indica si el grupo estï¿½ contratado por una compaï¿½ï¿½a discogrï¿½fica.
-	 * @return valor booleano <i>true</i> si el grupo estï¿½ contratado
+	 * Método que indica si el grupo está contratado por una compañía discográfica.
+	 * @return valor booleano <i>true</i> si el grupo está contratado
 	 */
 	public boolean estaContratado() {
 		return contratado;
 	}
 
 	/**
-	 * Mï¿½todo que cambia el estado del grupo musical a contratado por una 
-	 * compaï¿½ï¿½a discogrï¿½fica.
+	 * Método que cambia el estado del grupo musical a contratado por una 
+	 * compañía discográfica.
 	 */
 	public void contrata() {
 		contratado = true;
 	}
 
 	/**
-	 * Mï¿½todo que cambia el estado del grupo musical a no contratado 
-	 * por una compaï¿½ï¿½a discogrï¿½fica.
+	 * Método que cambia el estado del grupo musical a no contratado 
+	 * por una compañía discográfica.
 	 */
 	public void despide() {
 		contratado = false;
 	}
 	
 	/**
-	 * Mï¿½todo que devuelve una descripciï¿½n textual breve del grupo musical.
-	 * @return la descripciï¿½n textual breve del grupo musical
+	 * Método que devuelve una descripción textual breve del grupo musical.
+	 * @return la descripción textual breve del grupo musical
 	 */
 	public String verDescripcionBreve() {
 		return "CIF: " + cif + "\tNombre: " + nombre + "\n";
 	}
 
 	/**
-	 * Mï¿½todo que devuelve en una ï¿½nica cadena la informaciï¿½n completa del grupo
+	 * Método que devuelve en una única cadena la información completa del grupo
 	 * musical.
 	 * 
-	 * @return la descripciï¿½n completa del grupo musical
+	 * @return la descripción completa del grupo musical
 	 */
 	public String verDescripcionCompleta() {
 		return "CIF: " + cif + "\tNombre: " + nombre +
-			"\tFecha de creaciÃ³n: " + fechaCreacion + "\n";
+			"\tFecha de creación: " + fechaCreacion + "\n";
 	}
 
 	/**
-	 * Mï¿½todo que devuelve el nï¿½mero total de ï¿½lbumes de este grupo musical.
+	 * Método que devuelve el número total de álbumes de este grupo musical.
 	 * 
-	 * @return el nï¿½mero total de ï¿½lbumes
+	 * @return el número total de álbumes
 	 */
 	public int verNumeroAlbumes() {
 		return listaAlbumes.size();
 	}
 
 	/**
-	 * Mï¿½todo que aï¿½ade un nuevo miembro al grupo musical.
-	 * @param persona objeto de la clase Persona que va a aï¿½adirse como miembro
+	 * Método que añade un nuevo miembro al grupo musical.
+	 * @param persona objeto de la clase Persona que va a añadirse como miembro
 	 * @throws ExcepcionPersonas si la persona ya aparece como miembro del grupo
 	 */
 	public void anadirMiembro(Persona persona) throws ExcepcionPersonas {
@@ -179,35 +172,35 @@ public class GrupoMusical {
 			listaMiembrosActuales.put(persona.getDni(), persona);
 		} else {
 			throw new ExcepcionPersonas(persona.getDni(),
-							   "La persona que se ha intentado aï¿½adir ya es miembro del grupo");
+							   "La persona que se ha intentado añadir ya es miembro del grupo");
 		}
 	}
 	
 
 	/**
-	 * Mï¿½todo que permite obtener una colecciï¿½n de objetos que representan a
+	 * Método que permite obtener una colección de objetos que representan a
 	 * todas las personas que son miembros del grupo.
 	 * 
 	 * @return una lista donde cada elemento es un objeto de la clase Persona
 	 */
 	public List<Persona> recuperarMiembros() {
-		// Devuelve un objeto lista con los valores que habï¿½a en el mapa
+		// Devuelve un objeto lista con los valores que había en el mapa
 		return new ArrayList<Persona>(listaMiembrosActuales.values());
 	}
 
 	/**
-	 * Mï¿½todo que permite obtener una colecciï¿½n de objetos que representan a
+	 * Método que permite obtener una colección de objetos que representan a
 	 * todas las personas que han sido miembros del grupo.
 	 * 
 	 * @return una lista donde cada elemento es un objeto de la clase Persona
 	 */
 	public List<Persona> recuperarMiembrosAnteriores() {
-		// Devuelve un objeto lista con los valores que habï¿½a en el mapa
+		// Devuelve un objeto lista con los valores que había en el mapa
 		return new ArrayList<Persona>(listaMiembrosAnteriores.values());
 	}
 
 	/**
-	 * Mï¿½todo que elimina un miembro del grupo musical y lo aï¿½ade a la lista de miembros
+	 * Método que elimina un miembro del grupo musical y lo añade a la lista de miembros
 	 * anteriores.
 	 * @param dniPersona DNI de la persona que se va a eliminar como miembro
 	 * @throws ExcepcionPersonas si la persona que se quiere eliminar no 
@@ -226,65 +219,64 @@ public class GrupoMusical {
 	}
 
 	/**
-	 * Mï¿½todo que crea un nuevo ï¿½lbum y lo aï¿½ade a la colecciï¿½n.
+	 * Método que crea un nuevo álbum y lo añade a la colección.
 	 * 
 	 * @param titulo
-	 *            tï¿½tulo del ï¿½lbum
+	 *            título del álbum
 	 * @param fechaPublicacion
-	 *            fecha de publicaciï¿½n del ï¿½lbum en formato dd-MM-yyyy
+	 *            fecha de publicación del álbum en formato dd-MM-yyyy
 	 * @param ejemplaresVendidos
-	 *            nï¿½mero de ejemplares vendidos del ï¿½lbum
-	 * @return el identificador del ï¿½lbum creado
-	 * @throws ParseException si el parï¿½metro <i>fechaPublicacion</i> no tiene 
+	 *            número de ejemplares vendidos del álbum
+	 * @return el identificador del álbum creado
+	 * @throws ParseException si el parámetro <i>fechaPublicacion</i> no tiene 
 	 * el formato dd-MM-yyyy
 	 */	
 	public String crearAlbum(String titulo, String fechaPublicacion, int ejemplaresVendidos)
 			throws ParseException {
-		// Crea un identificador para el ï¿½lbum, formado por una 'a' y un
-		// nï¿½mero auto-incrementado
+		// Crea un identificador para el álbum, formado por una 'a' y un
+		// número auto-incrementado
 		String idAlbum = "a" + ultimoAlbum;
 		// Crea el objeto
 		Album a = new Album(idAlbum, titulo, fechaPublicacion, ejemplaresVendidos);
 		// La colecciona, indexada por identificador
 		listaAlbumes.put(idAlbum, a);
-		// Incrementa el contador
 		ultimoAlbum++;
 		return idAlbum;
 	}
 
 	/**
-	 * Mï¿½todo que comprueba si existe un ï¿½lbum identificado por un nï¿½mero ï¿½nico
+	 * Método que comprueba si existe un álbum identificado por un número único
 	 * @param id identificador del grupo musical
 	 * @return objeto del tipo Album correspondiente al identificador dado
-	 * @throws ExcepcionAlbumes si no existe un ï¿½lbum con un identificador
-	 * igual al valor del parï¿½metro <i>id</i>
+	 * @throws ExcepcionAlbumes si no existe un álbum con un identificador
+	 * igual al valor del parámetro <i>id</i>
 	 */
 	private Album comprobarAlbumExiste (String id) 
 		throws ExcepcionAlbumes {
 		Album album = listaAlbumes.get(id);
 		if (album == null) {
 			throw new ExcepcionAlbumes(id,
-							   "El ï¿½lbum que ha especificado no existe");
+							   "El álbum que ha especificado no existe");
 		}
 		return album;
 	}
 	
 	/**
-	 * Mï¿½todo que permite modificar un ï¿½lbum, recibiendo todos los campos (el
-	 * identificador de ï¿½lbum no puede cambiar).
+	 * Método que permite modificar un álbum, recibiendo todos los campos (el
+	 * identificador de álbum no puede cambiar).
 	 * 
 	 * @param idAlbum
-	 *            identificador del ï¿½lbum
+	 *            identificador del álbum
 	 * @param titulo
-	 *            tï¿½tulo del ï¿½lbum
+	 *            título del álbum
 	 * @param fechaPublicacion
-	 *            fecha de publicaciï¿½n del ï¿½lbum en formato dd-MM-yyyy
+	 *            fecha de publicación del álbum en formato dd-MM-yyyy
 	 * @param ejemplaresVendidos
-	 *            nï¿½mero de ejemplares vendidos del ï¿½lbum
-	 * @throws ParseException si el parï¿½metro <i>fechaPublicacion</i> no tiene 
+	 *            número de ejemplares vendidos del álbum
+	 * @throws ParseException si el parámetro <i>fechaPublicacion</i> no tiene 
 	 * el formato dd-MM-yyyy
 	 * @throws ExcepcionAlbumes
-	 *             si no existe un ï¿½lbum con un identificador igual al valor
+	 *             si no existe un álbum con un identificador igual al valor
 	 *             del campo <i>idAlbum</i>
 	 */
 	public void modificarAlbum(String idAlbum, String titulo,
@@ -298,59 +290,59 @@ public class GrupoMusical {
 	}
 
 	/**
-	 * Mï¿½todo que devuelve una lista de ï¿½lbumes existentes en este 
-	 * grupo musical, con su descripciï¿½n breve.
+	 * Método que devuelve una lista de álbumes existentes en este 
+	 * grupo musical, con su descripción breve.
 	 * 
 	 * @return una lista donde cada elemento es una cadena de texto con la
-	 *         descripciï¿½n breve de un ï¿½lbum
+	 *         descripción breve de un álbum
 	 */
 	public List<String> listarAlbumes() {
 		List<String> listado = new ArrayList<String>();
-		// Recorre la lista de ï¿½lbumes
+		// Recorre la lista de álbumes
 		for (Album a : listaAlbumes.values()) {
-			// A cada una le pide su descripciï¿½n breve
+			// A cada una le pide su descripción breve
 			listado.add(a.verDescripcionBreve());
 		}
 		return listado;
 	}
 
 	/**
-	 * Mï¿½todo que permite obtener una colecciï¿½n de objetos que representan a
-	 * todos los ï¿½lbumes existentes en este grupo musical.
+	 * Método que permite obtener una colección de objetos que representan a
+	 * todos los álbumes existentes en este grupo musical.
 	 * 
 	 * @return una lista donde cada elemento es un objeto de la clase Album
 	 */
 	public List<Album> recuperarAlbumes() {
-		// Devuelve un objeto lista con los valores que habï¿½a en el mapa
+		// Devuelve un objeto lista con los valores que había en el mapa
 		return new ArrayList<Album>(listaAlbumes.values());
 	}
 
 	/**
-	 * Mï¿½todo que permite ver los detalles de un ï¿½lbum en una cadena de texto.
+	 * Método que permite ver los detalles de un álbum en una cadena de texto.
 	 * 
 	 * @param idAlbum
-	 *            identificador del ï¿½lbum
-	 * @return cadena de texto con la descripciï¿½n completa del ï¿½lbum
+	 *            identificador del álbum
+	 * @return cadena de texto con la descripción completa del álbum
 	 * @throws ExcepcionAlbumes
-	 *             si no existe un ï¿½lbum con un valor de identificador igual al
-	 *             parï¿½metro <i>idAlbum</i>
+	 *             si no existe un álbum con un valor de identificador igual al
+	 *             parámetro <i>idAlbum</i>
 	 */
 	public String verAlbum(String idAlbum) throws ExcepcionAlbumes {
 		// Recupera la instancia
 		Album a = comprobarAlbumExiste(idAlbum);
-		// Le pide una descripciï¿½n
+		// Le pide una descripción
 		return a.verDescripcionCompleta();
 	}
 
 	/**
-	 * Mï¿½todo que permite recuperar el objeto que representa a un ï¿½lbum.
+	 * Método que permite recuperar el objeto que representa a un Álbum.
 	 * 
 	 * @param idAlbum
-	 *            identificador del ï¿½lbum
+	 *            identificador del álbum
 	 * @return un objeto de tipo Album
 	 * @throws ExcepcionAlbumes
-	 *             si no existe un ï¿½lbum con un valor de identificador igual al
-	 *             parï¿½metro <i>idAlbum</i>
+	 *             si no existe un álbum con un valor de identificador igual al
+	 *             parámetro <i>idAlbum</i>
 	 */
 	public Album recuperarAlbum(String idAlbum) throws ExcepcionAlbumes {
 		// Recupera la instancia
@@ -359,13 +351,13 @@ public class GrupoMusical {
 	}
 
 	/**
-	 * Mï¿½todo que permite borrar un ï¿½lbum.
+	 * Método que permite borrar un álbum.
 	 * 
 	 * @param idAlbum
-	 *            identificador del ï¿½lbum
+	 *            identificador del álbum
 	 * @throws ExcepcionAlbumes
-	 *             si no existe un ï¿½lbum con un valor de identificador igual al
-	 *             parï¿½metro <i>idAlbum</i>
+	 *             si no existe un álbum con un valor de identificador igual al
+	 *             parámetro <i>idAlbum</i>
 	 */
 	public void borrarAlbum(String idAlbum) throws ExcepcionAlbumes {
 		// Borra la instancia
@@ -374,21 +366,21 @@ public class GrupoMusical {
 	}
 
 	/**
-	 * Mï¿½todo que permite aï¿½adir un pista a un ï¿½lbum.
+	 * Método que permite añadir un pista a un álbum.
 	 * 
 	 * @param idAlbum
-	 *            identificador del ï¿½lbum
+	 *            identificador del álbum
 	 * @param nombre
 	 *            nombre de la pita
 	 * @param duracion
-	 *            duraciï¿½n de la pista
-	 * @return identificador ï¿½nico de la pista reciï¿½n creada
+	 *            duración de la pista
+	 * @return identificador único de la pista recién creada
 	 * @throws ExcepcionAlbumes
-	 *             si no existe un ï¿½lbum con un valor de idAlbum igual al
-	 *             parï¿½metro <i>idAlbum</i>
+	 *             si no existe un álbum con un valor de idAlbum igual al
+	 *             parámetro <i>idAlbum</i>
 	 * @throws ExcepcionAlbumes
-	 *             si no existe un ï¿½lbum con un valor de identificador igual al
-	 *             parï¿½metro <i>idAlbum</i>
+	 *             si no existe un álbum con un valor de identificador igual al
+	 *             parámetro <i>idAlbum</i>
 	 */
 	public String anadirPista(String idAlbum, String nombre, int duracion)
 		throws ExcepcionAlbumes {
@@ -398,15 +390,15 @@ public class GrupoMusical {
 	}
 
 	/**
-	 * Mï¿½todo que permite ver las pistas de un ï¿½lbum.
+	 * Método que permite ver las pistas de un álbum.
 	 * 
 	 * @param idAlbum
-	 *            identificador del ï¿½lbum
-	 * @return lista de cadenas de texto que contienen la informaciï¿½n de un
+	 *            identificador del álbum
+	 * @return lista de cadenas de texto que contienen la información de un
 	 *         pista
 	 * @throws ExcepcionAlbumes
-	 *             si no existe un ï¿½lbum con un valor de identificador del ï¿½lbum
-	 *             igual al parï¿½metro <i>idAlbum</i>
+	 *             si no existe un álbum con un valor de identificador del álbum
+	 *             igual al parámetro <i>idAlbum</i>
 	 */
 	public List<String> listarPistas(String idAlbum) throws ExcepcionAlbumes {
 		// Recupera la instancia
@@ -415,15 +407,15 @@ public class GrupoMusical {
 	}
 
 	/**
-	 * Mï¿½todo que permite recuperar la lista de objetos que representan las
-	 * pistas de un ï¿½lbum.
+	 * Método que permite recuperar la lista de objetos que representan las
+	 * pistas de un álbum.
 	 * 
 	 * @param idAlbum
-	 *            identificador del ï¿½lbum
+	 *            identificador del álbum
 	 * @return lista de objetos de tipo Pista
 	 * @throws ExcepcionAlbumes
-	 *             si no existe un ï¿½lbum con un valor de identificador igual al
-	 *             parï¿½metro <i>idAlbum</i>
+	 *             si no existe un álbum con un valor de identificador igual al
+	 *             parámetro <i>idAlbum</i>
 	 */
 	public List<Pista> recuperarPistas(String idAlbum) throws ExcepcionAlbumes {
 		// Recupera la instancia
@@ -432,19 +424,19 @@ public class GrupoMusical {
 	}
 
 	/**
-	 * Mï¿½todo que permite ver una pista concreta de un ï¿½lbum dado.
+	 * Método que permite ver una pista concreta de un álbum dado.
 	 * 
 	 * @param idAlbum
-	 *            identificador del ï¿½lbum
+	 *            identificador del álbum
 	 * @param idPista
-	 *            identificador ï¿½nico de la pista buscado
-	 * @return texto con informaciï¿½n de la pista
+	 *            identificador único de la pista buscado
+	 * @return texto con información de la pista
 	 * @throws ExcepcionAlbumes
-	 *             si no existe un ï¿½lbum con un valor de identificador igual al
-	 *             parï¿½metro <i>idAlbum</i>
+	 *             si no existe un álbum con un valor de identificador igual al
+	 *             parámetro <i>idAlbum</i>
 	 * @throws ExcepcionPistas
 	 *             si no existe una pista con un valor de identificador igual al
-	 *             valor del parï¿½metro <i>idPista</i>
+	 *             valor del parámetro <i>idPista</i>
 	 */
 	public String verPista(String idAlbum, String idPista)
 		throws ExcepcionAlbumes, ExcepcionPistas {
@@ -454,21 +446,21 @@ public class GrupoMusical {
 	}
 
 	/**
-	 * Mï¿½todo que permite recuperar el objeto que representa un pista concreto
-	 * de un ï¿½lbum dada.
+	 * Método que permite recuperar el objeto que representa un pista concreto
+	 * de un álbum dada.
 	 * 
 	 * @param idAlbum
-	 *            identificador del ï¿½lbum
+	 *            identificador del álbum
 	 * @param idPista
-	 *            identificador ï¿½nico de la pista buscada
-	 * @return objeto de tipo Pista cuyo identificador es igual al parï¿½metro
+	 *            identificador único de la pista buscada
+	 * @return objeto de tipo Pista cuyo identificador es igual al parámetro
 	 *         <i>idPista</i>
 	 * @throws ExcepcionAlbumes
-	 *             si no existe un ï¿½lbum con un valor de identificador igual al
-	 *             parï¿½metro <i>idAlbum</i>
+	 *             si no existe un álbum con un valor de identificador igual al
+	 *             parámetro <i>idAlbum</i>
 	 * @throws ExcepcionPistas
 	 *             si no existe una pista con un valor de identificador igual al
-	 *             valor del parï¿½metro <i>idPista</i>
+	 *             valor del parámetro <i>idPista</i>
 	 */
 	public Pista recuperarPista(String idAlbum, String idPista)
 		throws ExcepcionAlbumes, ExcepcionPistas {
@@ -478,22 +470,22 @@ public class GrupoMusical {
 	}
 
 	/**
-	 * Mï¿½todo que busca los ï¿½lbumes que entre sus pistas poseen una pista
-	 * determinada, y para cada una consigue su descripciï¿½n breve.
+	 * Método que busca los álbumes que entre sus pistas poseen una pista
+	 * determinada, y para cada una consigue su descripción breve.
 	 * 
 	 * @param nombre
 	 *            nombre de la pista buscada
-	 * @return lista de cadenas de texto, donde cada una contiene la descripciï¿½n
-	 *         breve de un ï¿½lbum
+	 * @return lista de cadenas de texto, donde cada una contiene la descripción
+	 *         breve de un álbum
 	 */
 	public List<String> buscarAlbumesConPista(String nombre) {
 		List<String> listado = new ArrayList<String>();
-		// Recorre la lista de ï¿½lbumes
+		// Recorre la lista de álbumes
 		for (Album a : listaAlbumes.values()) {
 			// Primero preguntamos si tiene la pista
 			if (a.tienePista(nombre) == true) {
 				// Si la tiene, entonces pedimos
-				// la descripciï¿½n breve
+				// la descripción breve
 				listado.add(a.verDescripcionBreve());
 			}
 		}
@@ -501,8 +493,8 @@ public class GrupoMusical {
 	}
 
 	/**
-	 * Mï¿½todo que busca los ï¿½lbumes que entre sus pistas poseen una pista
-	 * determinada, y devuelve los objetos que cumplen la condiciï¿½n.
+	 * Método que busca los álbumes que entre sus pistas poseen una pista
+	 * determinada, y devuelve los objetos que cumplen la condición.
 	 * 
 	 * @param nombre
 	 *            nombre de la pista buscada
@@ -510,11 +502,11 @@ public class GrupoMusical {
 	 */
 	public List<Album> recuperarAlbumesConPista(String nombre) {
 		List<Album> listado = new ArrayList<Album>();
-		// Recorre la lista de ï¿½lbumes
+		// Recorre la lista de álbumes
 		for (Album a : listaAlbumes.values()) {
 			// Primero preguntamos si tiene la pista
 			if (a.tienePista(nombre) == true) {
-				// Si la tiene, entonces aï¿½adimos el objeto de la clase Album
+				// Si la tiene, entonces añadimos el objeto de la clase Album
 				listado.add(a);
 			}
 		}
@@ -522,18 +514,18 @@ public class GrupoMusical {
 	}
 
 	/**
-	 * Mï¿½todo que permite borrar un pista de un ï¿½lbum.
+	 * Método que permite borrar un pista de un álbum.
 	 * 
 	 * @param idAlbum
-	 *            identificador del ï¿½lbum
+	 *            identificador del álbum
 	 * @param idPista
-	 *            identificador ï¿½nico de la pista
+	 *            identificador único de la pista
 	 * @throws ExcepcionAlbumes
-	 *             si no existe un ï¿½lbum con un valor de identificador igual al
-	 *             parï¿½metro <i>idAlbum</i>
+	 *             si no existe un álbum con un valor de identificador igual al
+	 *             parámetro <i>idAlbum</i>
 	 * @throws ExcepcionPistas
 	 *             si no existe un pista con un identificador igual al valor del
-	 *             parï¿½metro <i>idPista</i>
+	 *             parámetro <i>idPista</i>
 	 */
 	public void eliminarPista(String idAlbum, String idPista)
 		throws ExcepcionAlbumes, ExcepcionPistas {

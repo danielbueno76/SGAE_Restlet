@@ -56,7 +56,7 @@ public class PruebasSGAE {
 			// Creación de personas
 			System.out.println("Comenzando creación de personas...");
 			cp.crearPersona(pBart, "Bart", "Simpson", 
-					null);
+					"01-04-2003");
 			cp.crearPersona(pLisa, "Lisa", "Simpson", 
 					"02-02-2005");
 			cp.crearPersona(pMaggie, "Maggie", "Simpson", 

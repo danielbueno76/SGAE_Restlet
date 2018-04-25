@@ -6,7 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.restlet.data.CharacterSet;
 import org.restlet.data.Form;
+import org.restlet.data.Language;
 import org.restlet.data.LocalReference;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -46,7 +48,7 @@ public class AlbumServerResource extends ServerResource{
 	
 	@Override
 	protected void doInit() throws ResourceException {
-		getVariants().add(new Variant(MediaType.TEXT_PLAIN));	//AÃ±adimos los formatos que se van a poder negociar y cogemos los datos de la URI
+		getVariants().add(new Variant(MediaType.TEXT_PLAIN));	//Añdimos los formatos que se van a poder negociar y cogemos los datos de la URI
 		getVariants().add(new Variant(MediaType.TEXT_HTML));
 		this.grupoID = getAttribute("CIFgrupo");
 		this.albumID = getAttribute("albumID");
@@ -54,7 +56,7 @@ public class AlbumServerResource extends ServerResource{
 	}
 	
 	@Override
-	protected Representation get(Variant variant) throws ResourceException {
+	protected Representation get(Variant variant) {
 		Representation result = null;
 
 	if (MediaType.TEXT_PLAIN.isCompatible(variant.getMediaType())) {		//Representacion para texto plano
@@ -101,44 +103,45 @@ public class AlbumServerResource extends ServerResource{
 		return result;
 	}
 	
-	@Put("form-data")			//Funcion put para modificar alguno de los datos previamente introducidos de album
-	public Representation anadiralbum (Representation datos){
-
-		Form form = new Form(datos);			//Capturamos los datos de la cabecera
-		String CIF= this.grupoID;
-		String titulo= form.getFirstValue("TITULO");
-		String fechaPublicacion= form.getFirstValue("FECHAPUBLICACION");
-		int ejemplaresVendidos= Integer.parseInt(form.getFirstValue("EJEMPLARESVENDIDOS"));
-		//CIF=D0123456D&TITULO=Ave Maria&FECHAPUBLICACION=02-04-1999&EJEMPLARESVENDIDOS=6
-		 System.out.println("CIF: " + CIF);
-		 System.out.println("Titulo: " + titulo);
-		 System.out.println("Fecha de publicacion: " + fechaPublicacion);
-		 System.out.println("Numero de ejemplares vendidos: " + ejemplaresVendidos);
-		 Representation result = null;
-		 
-		try {
-			controladorGruposMusicales.modificarAlbum(CIF, this.albumID ,titulo, fechaPublicacion, ejemplaresVendidos);				//Modificamos los datos
-			// Si se produce la expcion significa que la persona ya existe --> el usuario quiere hacer un put de modificacion
-			 result =  new StringRepresentation("CIF: " + CIF +" Titulo: " + titulo+" Fecha de publicacion: " + fechaPublicacion+" Numero de ejemplares vendidos: " + ejemplaresVendidos,   MediaType.TEXT_HTML);
-		}catch (ParseException ax) {
-			System.out.println("ParseException Modificar Album");				//Controlamos las posibles excepciones que se pueden producir
-			 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-		}
-		catch (ExcepcionGruposMusicales ax) {
-			System.out.println("ExcepcionGruposMusicales Modificar Album");
-			 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-		}
-		catch (ExcepcionAlbumes ax) {
-			System.out.println("ExcepcionAlbumes Modificar Album");
-			 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-		}
+	//@Put("form-data")			//Funcion put para modificar alguno de los datos previamente introducidos de album
+	public Representation put (Representation datos, Variant variant){
 		
-		return result;
+		Representation result=null;
+		if (MediaType.APPLICATION_WWW_FORM.isCompatible(variant.getMediaType())) {
+			Form form = new Form(datos);			//Capturamos los datos de la cabecera
+			String CIF= this.grupoID;
+			String titulo= form.getFirstValue("TITULO");
+			String fechaPublicacion= form.getFirstValue("FECHAPUBLICACION");
+			int ejemplaresVendidos= Integer.parseInt(form.getFirstValue("EJEMPLARESVENDIDOS"));
+			//CIF=D0123456D&TITULO=Ave Maria&FECHAPUBLICACION=02-04-1999&EJEMPLARESVENDIDOS=6
+			 System.out.println("CIF: " + CIF);
+			 System.out.println("Titulo: " + titulo);
+			 System.out.println("Fecha de publicacion: " + fechaPublicacion);
+			 System.out.println("Numero de ejemplares vendidos: " + ejemplaresVendidos);
+			 
+			try {
+				controladorGruposMusicales.modificarAlbum(CIF, this.albumID ,titulo, fechaPublicacion, ejemplaresVendidos);				//Modificamos los datos
+				// Si se produce la expcion significa que la persona ya existe --> el usuario quiere hacer un put de modificacion
+				 result =  new StringRepresentation("CIF: " + CIF +" Titulo: " + titulo+" Fecha de publicacion: " + fechaPublicacion+" Numero de ejemplares vendidos: " + ejemplaresVendidos,   MediaType.TEXT_PLAIN, Language.SPANISH, CharacterSet.ISO_8859_1);
+			}catch (ParseException ax) {
+				System.out.println("ParseException Modificar Album");				//Controlamos las posibles excepciones que se pueden producir
+				 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			}
+			catch (ExcepcionGruposMusicales ax) {
+				System.out.println("ExcepcionGruposMusicales Modificar Album");
+				 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			}
+			catch (ExcepcionAlbumes ax) {
+				System.out.println("ExcepcionAlbumes Modificar Album");
+				 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			}
+		}
+			return result;
 
 	}
 	
-	@Delete
-	public void remove(){			//Funcion delete para borrar un album del sistema
+	
+	public Representation delete(Variant variant){			//Funcion delete para borrar un album del sistema
 		
 		try {
 		controladorGruposMusicales.borrarAlbum(this.grupoID, this.albumID);
@@ -153,6 +156,7 @@ public class AlbumServerResource extends ServerResource{
 			System.out.println("ExcepcionGruposMusicales Borrar Album");
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
+		return null;
 	}
 	
 	
