@@ -10,7 +10,9 @@ import org.restlet.Component;
 import org.restlet.Client;
 import org.restlet.Context;
 import org.restlet.Server;
+import org.restlet.data.CharacterSet;
 import org.restlet.data.Form;
+import org.restlet.data.Language;
 import org.restlet.data.LocalReference;
 import org.restlet.data.MediaType;
 import org.restlet.data.Protocol;
@@ -50,8 +52,9 @@ public class AlbumesServerResource extends ServerResource{
 	
 	@Override
 	protected void doInit() throws ResourceException {		
-		getVariants().add(new Variant(MediaType.TEXT_PLAIN));	//A帽adimos los formatos que se van a poder negociar 
+		getVariants().add(new Variant(MediaType.TEXT_PLAIN));	//A馻dimos los formatos que se van a poder negociar 
 		getVariants().add(new Variant(MediaType.TEXT_HTML));
+		getVariants().add(new Variant(MediaType.APPLICATION_WWW_FORM));
 		this.grupoID = getAttribute("CIFgrupo");				//Sacamos el identificador del grupo de la URI
 		
 	}
@@ -62,8 +65,8 @@ public class AlbumesServerResource extends ServerResource{
 		StringBuilder result2 = new StringBuilder();
 	if (MediaType.TEXT_PLAIN.isCompatible(variant.getMediaType())) {		//Peticion de formato plano	
 		try {
-			for (Album album: controladorGruposMusicales.recuperarAlbumes(grupoID)) {		//Mostramos la informaci贸n breve de cada album y el URI relativo para el siguiente elemento
-				result2.append((album == null) ? "" : "T铆tulo: " + album.getTitulo() + "\tUri: " + album.getId()+"/").append('\n');
+			for (Album album: controladorGruposMusicales.recuperarAlbumes(grupoID)) {		//Mostramos la informaci髇 breve de cada album y el URI relativo para el siguiente elemento
+				result2.append((album == null) ? "" : "T韙ulo: " + album.getTitulo() + "\tUri: " + album.getId()+"/").append('\n');
 			}
 		} catch (ExcepcionGruposMusicales e) {		//Capturamos los posibles fallos que se puede dar
 			System.out.println("ExcepcionGruposMusicales No existe el grupo");	//No existe el grupo solicitado
@@ -110,30 +113,33 @@ public class AlbumesServerResource extends ServerResource{
 		return result;
 	}
 	
-	@Post("form")				//Post para a帽adir nuevos albumes sin poder escoger el identificador
-	public Representation anadiralbum (Representation datos) {
-
-		Form form = new Form(datos);		//Cogemos los datos recibidos en la cabecera del mensaje
-		String CIF= this.grupoID;
-		String titulo= form.getFirstValue("TITULO");
-		String fechaPublicacion= form.getFirstValue("FECHAPUBLICACION");
-		int ejemplaresVendidos= Integer.parseInt(form.getFirstValue("EJEMPLARESVENDIDOS"));
-		//TITULO=Ave Maria&FECHAPUBLICACION=02-04-1999&EJEMPLARESVENDIDOS=6
-		 System.out.println("CIF: " + CIF);
-		 System.out.println("Titulo: " + titulo);
-		 System.out.println("Fecha de publicaci贸n: " + fechaPublicacion);
-		 System.out.println("Numero de ejemplares vendidos: " + ejemplaresVendidos);
-		 Representation result = null;
-		 
-		try {
-			controladorGruposMusicales.crearAlbum(CIF, titulo, fechaPublicacion, ejemplaresVendidos);		//Creamos el album con la informaci贸n necesaria
-			 result =  new StringRepresentation("CIF: " + CIF +" T铆tulo: " + titulo+" Fecha de publicaci贸n: " + fechaPublicacion+" N煤mero de ejemplares vendidos: " + ejemplaresVendidos,   MediaType.TEXT_HTML);
-		}catch (ParseException ax) {
-			System.out.println("ParseException CrearAlbum");
-			 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-		}catch (ExcepcionGruposMusicales ax) {
-			System.out.println("ExcepcionGruposMusicales Ya existe el album");
-			 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+	//@Post("form")				//Post para a馻dir nuevos albumes sin poder escoger el identificador
+	
+	public Representation post (Representation datos, Variant variant) {
+		Representation result = null;
+		if (MediaType.APPLICATION_WWW_FORM.isCompatible(variant.getMediaType())) {
+			Form form = new Form(datos);		//Cogemos los datos recibidos en la cabecera del mensaje
+			String CIF= this.grupoID;
+			String titulo= form.getFirstValue("TITULO");
+			String fechaPublicacion= form.getFirstValue("FECHAPUBLICACION");
+			int ejemplaresVendidos= Integer.parseInt(form.getFirstValue("EJEMPLARESVENDIDOS"));
+			//TITULO=Ave Maria&FECHAPUBLICACION=02-04-1999&EJEMPLARESVENDIDOS=6
+			 System.out.println("CIF: " + CIF);
+			 System.out.println("Titulo: " + titulo);
+			 System.out.println("Fecha de publicaci髇: " + fechaPublicacion);
+			 System.out.println("N鷐ero de ejemplares vendidos: " + ejemplaresVendidos);
+			 
+			 
+			try {
+				controladorGruposMusicales.crearAlbum(CIF, titulo, fechaPublicacion, ejemplaresVendidos);		//Creamos el album con la informaci髇 necesaria
+				 result =  new StringRepresentation("CIF: " + CIF +" T韙ulo: " + titulo+" Fecha de publicaci髇: " + fechaPublicacion+" N鷐ero de ejemplares vendidos: " + ejemplaresVendidos + "Uri: " + getLocationRef().getIdentifier(),   MediaType.TEXT_PLAIN, Language.SPANISH, CharacterSet.ISO_8859_1);
+			}catch (ParseException ax) {
+				System.out.println("ParseException CrearAlbum");
+				 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			}catch (ExcepcionGruposMusicales ax) {
+				System.out.println("ExcepcionGruposMusicales Ya existe el album");
+				 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			}
 		}
 		return result;
 

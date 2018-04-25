@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.restlet.data.CharacterSet;
 import org.restlet.data.Form;
+import org.restlet.data.Language;
 import org.restlet.data.LocalReference;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -19,10 +21,12 @@ import org.restlet.resource.Post;
 import org.restlet.resource.Put;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
+
 import sgae.nucleo.gruposMusicales.ControladorGruposMusicales;
 import sgae.nucleo.gruposMusicales.ExcepcionAlbumes;
 import sgae.nucleo.gruposMusicales.ExcepcionGruposMusicales;
 import sgae.nucleo.gruposMusicales.ExcepcionPistas;
+import sgae.nucleo.gruposMusicales.Pista;
 import sgae.servidor.aplicacion.SGAEaplicacion;
 import sgae.util.generated.AlbumInfoBreve;
 import sgae.util.generated.Albumes;
@@ -45,6 +49,7 @@ public class PistasServerResource extends ServerResource{
 	protected void doInit() throws ResourceException{	
 		getVariants().add(new Variant (MediaType.TEXT_HTML));
 		getVariants().add(new Variant(MediaType.TEXT_PLAIN));
+		getVariants().add(new Variant(MediaType.APPLICATION_WWW_FORM));
 		this.grupoID = getAttribute("CIFgrupo");
 		this.idAlbum = getAttribute("albumID");
 	}
@@ -55,8 +60,8 @@ public class PistasServerResource extends ServerResource{
 		StringBuilder result2 = new StringBuilder();
 		if (MediaType.TEXT_PLAIN.isCompatible(variant.getMediaType())) {		
 			try {
-				for (String album: controladorGruposMusicales.listarPistas(grupoID,idAlbum)) {
-					result2.append((album == null) ? "" : album).append('\n');
+				for (Pista p: controladorGruposMusicales.recuperarPistas(grupoID,idAlbum)) {
+					result2.append((p == null) ? "" : p.getNombre()).append('\n');
 				}
 			} catch (ExcepcionGruposMusicales e) {				
 				System.out.println("ExcepcionGruposMusicales  listarpistas --> No existe el grupo");
@@ -79,7 +84,7 @@ public class PistasServerResource extends ServerResource{
 					PistaInfoBreve pistaInfo = new PistaInfoBreve();	
 					pistaInfo.setNombre(a.getNombre());
 					Link link = new Link();
-					link.setHref(a.getIdPista()+"/");
+					link.setHref(a.getIdPista());
 					link.setTitle("Pistas");
 					link.setType("simple");
 					pistaInfo.setUri(link);
@@ -109,34 +114,34 @@ public class PistasServerResource extends ServerResource{
 		return result;
 	}
 	
-	@Post("form")
-	public Representation anadirPista (Representation datos){
 
-		Form form = new Form(datos);		
-		String CIF= this.grupoID;
-		String idAlbum = this.idAlbum;
-		String Nombre= form.getFirstValue("NOMBRE");
-		String Duracion= form.getFirstValue("DURACION");
-		int duracion = Integer.parseInt(Duracion);
-
-		System.out.println("CIF: " + CIF );
-		System.out.println("Album: " + idAlbum );
-		System.out.println("Nombre: " + Nombre);
-		System.out.println("Duracion: " + duracion);
+	public Representation post (Representation datos, Variant variant) {
 		Representation result = null;
-		 
-		try {
-			controladorGruposMusicales.anadirPista(CIF, idAlbum, Nombre, duracion);
-			result =  new StringRepresentation("CIF: " + CIF +" Album: " + idAlbum+" Nombre: " + Nombre +"Duracion: "+Duracion,   MediaType.TEXT_HTML);
-		} catch (ExcepcionAlbumes ex){
-			System.out.println("ExcepcionAlbumes Crearpista");
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-			
-		}catch (ExcepcionGruposMusicales ax) {
-			System.out.println("ExcepcionGruposMusicales Crearpista");
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		if (MediaType.APPLICATION_WWW_FORM.isCompatible(variant.getMediaType())) {
+			Form form = new Form(datos);		
+			String CIF= this.grupoID;
+			String idAlbum = this.idAlbum;
+			String Nombre= form.getFirstValue("NOMBRE");
+			String Duracion= form.getFirstValue("DURACION");
+			int duracion = Integer.parseInt(Duracion);
+	
+			System.out.println("CIF: " + CIF );
+			System.out.println("Album: " + idAlbum );
+			System.out.println("Nombre: " + Nombre);
+			System.out.println("Duracion: " + duracion);
+			 
+			try {
+				controladorGruposMusicales.anadirPista(CIF, idAlbum, Nombre, duracion);
+				result =  new StringRepresentation("CIF: " + CIF +" Album: " + idAlbum+" Nombre: " + Nombre +"Duracion: "+Duracion,   MediaType.TEXT_PLAIN, Language.SPANISH, CharacterSet.ISO_8859_1);
+			} catch (ExcepcionAlbumes ex){
+				System.out.println("ExcepcionAlbumes Crearpista");
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+				
+			}catch (ExcepcionGruposMusicales ax) {
+				System.out.println("ExcepcionGruposMusicales Crearpista");
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			}
 		}
-
 		return result;
 	}	
 

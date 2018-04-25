@@ -1,12 +1,12 @@
 <html>
-	<head><title>Lista de albumes</title></head>
+	<head><title>Lista de pistas</title></head>
 	<body>
 		<table>
 			<tbody>
-				#foreach( $album in $albumes)
+				#foreach( $pista in $pistas)
 				<tr>
-				<td>Título: </td><td>$album.titulo</td>
-				<td>Album Id: </td><td><a href="$album.uri.href">$album.uri.href</a></td>
+				<td>Título: </td><td>$pista.nombre</td>
+				<td>Album Id: </td><td><a href="$pista.uri.href">$pista.uri.href</a></td>
 				</tr>
 				#end
 			</tbody>

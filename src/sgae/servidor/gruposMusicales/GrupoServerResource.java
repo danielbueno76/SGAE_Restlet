@@ -13,12 +13,14 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
+
 import sgae.nucleo.gruposMusicales.ControladorGruposMusicales;
 import sgae.nucleo.gruposMusicales.ExcepcionGruposMusicales;
 import sgae.nucleo.gruposMusicales.GrupoMusical;
 import sgae.nucleo.personas.ExcepcionPersonas;
 import sgae.nucleo.personas.Persona;
 import sgae.servidor.aplicacion.SGAEaplicacion;
+import sgae.util.generated.Link;
 
 public class GrupoServerResource extends ServerResource{
 	
@@ -58,6 +60,16 @@ public class GrupoServerResource extends ServerResource{
 			grupoInfo.setCIF(g.getCif());
 			grupoInfo.setNombre(g.getNombre());
 			grupoInfo.setFechacreacion(g.getFechaCreacion());
+			Link link1 = new Link();
+			link1.setHref("albumes/");
+			link1.setTitle("Albumes");
+			link1.setType("simple");
+			grupoInfo.setUri1(link1);
+			Link link2 = new Link();
+			link2.setHref("miembros");
+			link2.setTitle("Miembros");
+			link2.setType("simple");
+			grupoInfo.setUri2(link2);
 			result = new JaxbRepresentation<sgae.util.generated.Grupo> (grupoInfo);
 			result.setFormattedOutput(true);
 		}catch(ExcepcionGruposMusicales ex) {
@@ -74,7 +86,7 @@ public class GrupoServerResource extends ServerResource{
 		Form form = new Form(datos);	
 		String CIF= this.grupoID;
 		String DNI= form.getValues("DNI");
-		//Si DNI es nulo significa que queremos aÃ±adir un grupo
+		//Si DNI es nulo significa que queremos añadir un grupo
 		if (DNI==null) {
 			
 			String Nombre= form.getFirstValue("NOMBRE");
@@ -183,30 +195,7 @@ public class GrupoServerResource extends ServerResource{
 		{
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
-	}	
-
-//	
-//	@Delete("form-data")
-//	public Representation remove(Representation datos){
-//		Representation result = null;		
-//		Form form = new Form(datos);	
-//		String DNI= form.getFirstValue("DNI");
-//		try {
-//			
-//			controladorGruposMusicales.eliminarMiembro(grupoID, DNI);
-//			 result =  new StringRepresentation("Se elimina un miembro con DNI: " + DNI +" al grupo con CIF: " + this.grupoID,   MediaType.APPLICATION_WWW_FORM);
-//				
-//		} catch (ExcepcionPersonas ex){
-//			System.out.println("ExcepcionPersonas borrar Miembro");
-//			 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-//		}catch (ExcepcionGruposMusicales e) {
-//			System.out.println("ExcepcionGruposMusicales borrar Miembro");
-//			 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-//		}
-//		return result;
-//		
-//		
-//	}
+	}
 
 
 }

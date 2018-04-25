@@ -5,7 +5,9 @@ import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.restlet.data.CharacterSet;
 import org.restlet.data.Form;
+import org.restlet.data.Language;
 import org.restlet.data.LocalReference;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -55,7 +57,7 @@ public class PistaServerResource extends ServerResource{
 		if (MediaType.TEXT_PLAIN.isCompatible(variant.getMediaType())) {
 			
 			try {
-				result = new StringRepresentation(controladorGruposMusicales.verPista(grupoID, idAlbum, idPista));
+				result = new StringRepresentation(controladorGruposMusicales.verPista(grupoID, idAlbum, idPista),MediaType.TEXT_PLAIN, Language.SPANISH, CharacterSet.ISO_8859_1);
 			} catch (ExcepcionAlbumes e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -85,7 +87,7 @@ public class PistaServerResource extends ServerResource{
 								// Wrap bean with Velocity representation
 								return new TemplateRepresentation(pistaVtl, pistaDataModel, MediaType.TEXT_HTML);
 					} catch (IOException e) {
-						
+						System.out.println("IOException");
 					} catch (ExcepcionAlbumes e) {
 						System.out.println("ExcepcionAlbumes No existe el album");
 						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
@@ -106,7 +108,7 @@ public class PistaServerResource extends ServerResource{
 	
 	
 	@Delete
-	public void remove (){	
+	public Representation delete(Variant variant){	
 	
 		
 		try {
@@ -114,13 +116,17 @@ public class PistaServerResource extends ServerResource{
 		}
 		catch(ExcepcionGruposMusicales ex){
 			System.out.println("ExcepcionGruposMusicales Eliminarpista");
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
 		catch(ExcepcionAlbumes ex){
 			System.out.println("ExcepcionAlbumes Eliminarpista");
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
 		catch(ExcepcionPistas ex){
 			System.out.println("ExcepcionPistas Eliminarpista");
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
+		return null;
 		
 	}
 

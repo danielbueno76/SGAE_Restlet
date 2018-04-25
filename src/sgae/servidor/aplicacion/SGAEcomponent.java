@@ -30,7 +30,7 @@ public class SGAEcomponent extends Component{
 		getClients().add(client); //esto sirve para albumes
 		VirtualHost host = getDefaultHost();
 		host.attachDefault(new SGAEaplicacion());	
-		
+		//host.attachDefault(new HelloClient());
 		
 	}
 }

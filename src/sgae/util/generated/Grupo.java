@@ -2,7 +2,7 @@
 // Este archivo ha sido generado por la arquitectura JavaTM para la implantación de la referencia de enlace (JAXB) XML v2.2.8-b130911.1802 
 // Visite <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Todas las modificaciones realizadas en este archivo se perderán si se vuelve a compilar el esquema de origen. 
-// Generado el: 2018.04.19 a las 10:51:17 AM CEST 
+// Generado el: 2018.04.25 a las 12:30:43 PM CEST 
 //
 
 
@@ -28,6 +28,8 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="CIF" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="nombre" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="fechacreacion" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="uri1" type="{http://www.ptpd.tel.uva.es/ns/sgaerest/util/link}link"/>
+ *         &lt;element name="uri2" type="{http://www.ptpd.tel.uva.es/ns/sgaerest/util/link}link"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -40,7 +42,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
     "cif",
     "nombre",
-    "fechacreacion"
+    "fechacreacion",
+    "uri1",
+    "uri2"
 })
 @XmlRootElement(name = "Grupo")
 public class Grupo {
@@ -51,6 +55,10 @@ public class Grupo {
     protected String nombre;
     @XmlElement(required = true)
     protected String fechacreacion;
+    @XmlElement(required = true)
+    protected Link uri1;
+    @XmlElement(required = true)
+    protected Link uri2;
 
     /**
      * Obtiene el valor de la propiedad cif.
@@ -122,6 +130,54 @@ public class Grupo {
      */
     public void setFechacreacion(String value) {
         this.fechacreacion = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad uri1.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Link }
+     *     
+     */
+    public Link getUri1() {
+        return uri1;
+    }
+
+    /**
+     * Define el valor de la propiedad uri1.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Link }
+     *     
+     */
+    public void setUri1(Link value) {
+        this.uri1 = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad uri2.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Link }
+     *     
+     */
+    public Link getUri2() {
+        return uri2;
+    }
+
+    /**
+     * Define el valor de la propiedad uri2.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Link }
+     *     
+     */
+    public void setUri2(Link value) {
+        this.uri2 = value;
     }
 
 }

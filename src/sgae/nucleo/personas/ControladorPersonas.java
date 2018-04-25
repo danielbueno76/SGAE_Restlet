@@ -38,7 +38,7 @@ public class ControladorPersonas implements InterfazControladorPersonas {
 				 String fechaNacimiento) 
 		throws ParseException, ExcepcionPersonas {
 		// Comprueba si no existe ya
-		 if(listaPersonas.containsKey(dni) == false) {
+		if(listaPersonas.containsKey(dni) == false) {
 			// Crea la instancia
 			Persona p = new Persona(dni, nombre, apellidos, 
 						fechaNacimiento);
