@@ -3,10 +3,13 @@ import java.text.ParseException;
 
 import org.restlet.Application;
 import org.restlet.Restlet;
+import org.restlet.data.Status;
+import org.restlet.resource.ResourceException;
 import org.restlet.routing.Router;
 import sgae.nucleo.gruposMusicales.ControladorGruposMusicales;
 import sgae.nucleo.gruposMusicales.ExcepcionAlbumes;
 import sgae.nucleo.gruposMusicales.ExcepcionGruposMusicales;
+import sgae.nucleo.gruposMusicales.ExcepcionPistas;
 import sgae.nucleo.personas.ControladorPersonas;
 import sgae.nucleo.personas.ExcepcionPersonas;
 import sgae.nucleo.personas.InterfazControladorPersonas;
@@ -27,8 +30,8 @@ public class SGAEaplicacion extends Application{
 	public SGAEaplicacion(){
 		
 		setName("SGAE Server Application");
-		setDescription("Servidor de SGAE para almacenar informacion sobre grupos musicales");
-		setOwner("YO");
+		setDescription("Servidor de SGAE para almacenar informaci髇 sobre grupos musicales");
+		setOwner("ptpdx01");
 		setAuthor("RHB y DBP");
 		controladorPersonas = new ControladorPersonas();
 		controladorGruposMusicales = new ControladorGruposMusicales(controladorPersonas);
@@ -36,15 +39,15 @@ public class SGAEaplicacion extends Application{
 		controladorPersonas.crearPersona("00000000A", "Bart", "Simpson","01-04-2003");
 		controladorPersonas.crearPersona("11111111A", "Lisa", "Simpson","02-11-2006");
 		} catch (ParseException e) {
-			System.err.println("Alguna de las fechas proporcionadas no es v谩lida.");
+			System.err.println("Alguna de las fechas proporcionadas no es v醠ida.");
 		} catch (ExcepcionPersonas e) {
-			System.err.println("Ha fallado una operaci贸n para la persona con DNI " + 
-					e.getDniPersona() + " por la siguiente raz贸n: " + 
+			System.err.println("Ha fallado una operaci髇 para la persona con DNI " + 
+					e.getDniPersona() + " por la siguiente raz髇: " + 
 					e.getCausaFallo());
 		}
 		try {
 
-			// Creaci贸n de grupos musicales
+			// Creaci髇 de grupos musicales
 			controladorGruposMusicales.crearGrupoMusical("D0123456D", "Jamiroquai", "02-04-1992");
 			controladorGruposMusicales.crearGrupoMusical("E0123456E", "Blur", "03-05-1988");
 			controladorGruposMusicales.crearAlbum("D0123456D", "Piloto", "02-05-1994", 3);
@@ -52,27 +55,31 @@ public class SGAEaplicacion extends Application{
 			
 
 		} catch (ExcepcionGruposMusicales e) {
-				System.err.println("Ha fallado una operaci贸n para la discogr谩fica con CIF " + 
-						e.getCif() + " por la siguiente raz贸n: " + 
+				System.err.println("Ha fallado una operaci髇 para la discogr醘ica con CIF " + 
+						e.getCif() + " por la siguiente raz髇: " + 
 						e.getCausaFallo());
 			} catch (ParseException e) {
-				System.err.println("Alguna de las fechas proporcionadas no es v谩lida.");
+				System.err.println("Alguna de las fechas proporcionadas no es v醠ida.");
 		}
 		try {
-			// Creaci贸n de grupos musicales
+			// Creaci髇 de grupos musicales
 			controladorGruposMusicales.crearAlbum("D0123456D", "Ave Maria", "09-09-1999", 3);
 			controladorGruposMusicales.crearAlbum("E0123456E", "Piloto2", "02-02-1982", 5);
 			controladorGruposMusicales.anadirPista("D0123456D", "a0", "PistaHielo", 6);
 			controladorGruposMusicales.anadirPista("D0123456D", "a1", "PistaFuego", 5);
 		} catch (ExcepcionGruposMusicales e) {
-				System.err.println("Ha fallado una operaci贸n para la discogr谩fica con CIF " + 
-						e.getCif() + " por la siguiente raz贸n: " + 
+				System.err.println("Ha fallado una operaci髇 para la discogr醘ica con CIF " + 
+						e.getCif() + " por la siguiente raz髇: " + 
 						e.getCausaFallo());
 			} catch (ParseException e) {
-				System.err.println("Alguna de las fechas proporcionadas no es v谩lida.");
+				System.err.println("Alguna de las fechas proporcionadas no es v醠ida.");
 		} catch (ExcepcionAlbumes e) {
 			System.err.println("Error al crear pistas porque no existe el album.");
 			}
+		catch (ExcepcionPistas ax) {
+			System.out.println("ExcepcionPistas Crearpista");
+
+		}
 		
 		try {
 			controladorGruposMusicales.anadirMiembro("D0123456D", "00000000A");

@@ -107,7 +107,7 @@ public class PistaServerResource extends ServerResource{
 	}
 	
 	
-	@Delete
+	//@Delete
 	public Representation delete(Variant variant){	
 	
 		

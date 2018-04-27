@@ -116,7 +116,7 @@ public class GrupoServerResource extends ServerResource{
 				System.out.print(arrayDNIs[i] + ",\t");//Mostrar DNIs
 			}
 			System.out.println("\nCIF grupo: " + CIF);
-
+			
 			try {
 				StringBuilder result2 = new StringBuilder();
 				if (controladorGruposMusicales.recuperarMiembros(grupoID).isEmpty()) {
@@ -124,7 +124,7 @@ public class GrupoServerResource extends ServerResource{
 					for(i=0;i<arrayDNIs.length;i++) {
 						//Significa que ese DNI no está incluido como miembro actual
 						controladorGruposMusicales.anadirMiembro(CIF, arrayDNIs[i]);
-						result2.append("Se añade un miembro con DNI: " + arrayDNIs[i] +" al grupo con CIF: " + CIF).append('\n');
+						result2.append("Se a�ade un miembro con DNI: " + arrayDNIs[i] +" al grupo con CIF: " + CIF).append('\n');
 					}
 					result = new StringRepresentation(result2.toString());
 				}
@@ -148,14 +148,14 @@ public class GrupoServerResource extends ServerResource{
 						
 					}
 					else {
-						//Significa que queremos añadir un miembro.
+						//Significa que queremos a�adir un miembro.
 						for (Persona persona: controladorGruposMusicales.recuperarMiembros(grupoID)) {
 							for(i=0;i<arrayDNIs.length;i++) {
 	
 								if(persona.getDni().equals(arrayDNIs[i])==false) {
 									//Significa que ese DNI no está incluido como miembro actual
 									controladorGruposMusicales.anadirMiembro(CIF, arrayDNIs[i]);
-									result2.append("Se añade un miembro con DNI: " + arrayDNIs[i] +" al grupo con CIF: " + CIF).append('\n');
+									result2.append("Se a�ade un miembro con DNI: " + arrayDNIs[i] +" al grupo con CIF: " + CIF).append('\n');
 									
 								}
 								else {
@@ -170,10 +170,10 @@ public class GrupoServerResource extends ServerResource{
 
 			}
 			catch (ExcepcionPersonas ex){
-				System.out.println("ExcepcionPersonas añadir Miembro");
+				System.out.println("ExcepcionPersonas a�adir Miembro");
 				 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 			}catch (ExcepcionGruposMusicales e) {
-				System.out.println("ExcepcionGruposMusicales añadir Miembro");
+				System.out.println("ExcepcionGruposMusicales a�adir Miembro");
 				 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 			}
 

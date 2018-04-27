@@ -1,5 +1,8 @@
 package sgae.nucleo.discograficas;
+import java.text.ParseException;
+
 import sgae.nucleo.gruposMusicales.GrupoMusical;
+import sgae.util.Utils;
 
 /**
  * Clase que recoge las características de un contrato y los métodos para 
@@ -30,15 +33,20 @@ public class Contrato {
      * @param fechaInicio fecha de inicio del contrato
      * @param fechaFin fecha de finalización del contrato
      * @param sueldo el sueldo que se percibe
+     * @throws ParseException si el parámetro id está vacío, contiene sólo espacios o es el puntero null, o 
+     * si el sueldo es un número negativo o si los parámetros fechaInicio y fechaFin no tienen el formato dd-MM-yyyy
      */
     public Contrato(String id, GrupoMusical grupoMusical,
-		    String fechaInicio, String fechaFin, float sueldo) {
+		    String fechaInicio, String fechaFin, float sueldo) throws ParseException {
         super();
         // Inicializa según los parámetros
-        this.id = id;
+        this.id = Utils.testStringNullOrEmptyOrWhitespaceAndSet(id, "Campo id vacío");
         this.grupoMusical = grupoMusical;
-        this.fechaInicio = fechaInicio;
-        this.fechaFin = fechaFin;
+        this.fechaInicio = Utils.testStringNullOrEmptyOrWhitespaceAndSet(fechaInicio, "Campo fecha inicio vacío");
+        this.fechaFin = Utils.testStringNullOrEmptyOrWhitespaceAndSet(fechaFin, "Campo fecha fin vacío");
+        if (sueldo < 0) {
+        	throw new ParseException("El sueldo no puede ser negativo", 0);
+        }
         this.sueldo = sueldo;
         // Por defecto un contrato se crea como activo
         this.activo = true;
@@ -65,8 +73,12 @@ public class Contrato {
     /**
      * Método que modifica el sueldo del contrato.
      * @param sueldo el nuevo sueldo del contrato
+     * @throws ParseException si el sueldo es un número negativo
      */
-    public void setSueldo(float sueldo) {
+    public void setSueldo(float sueldo) throws ParseException {
+        if (sueldo < 0) {
+        	throw new ParseException("El sueldo no puede ser negativo", 0);
+        }
         this.sueldo = sueldo;
     }
 
@@ -81,9 +93,10 @@ public class Contrato {
     /**
      * Método que modifica la fecha de inicio del contrato.
      * @param fechaInicio la nueva fecha de inicio del contrato
+     * @throws si el valor de la fecha no tiene el formato dd-MM-yyyy
      */
-    public void setFechaInicio(String fechaInicio) {
-        this.fechaInicio = fechaInicio;
+    public void setFechaInicio(String fechaInicio) throws ParseException {
+        this.fechaInicio = Utils.testStringNullOrEmptyOrWhitespaceAndSet(fechaInicio, "Campo fecha inicio vacío");
     }
 
     /**
@@ -97,9 +110,10 @@ public class Contrato {
     /**
      * Método que modifica la fecha de inicio del contrato.
      * @param fechaFinalizacion la nueva fecha de finalización del contrato
+     * @throws si el valor de la fecha no tiene el formato dd-MM-yyyy
      */
-    public void setFechaFinalizacion(String fechaFinalizacion) {
-        this.fechaFin = fechaFinalizacion;
+    public void setFechaFinalizacion(String fechaFinalizacion) throws ParseException {
+        this.fechaFin = Utils.testStringNullOrEmptyOrWhitespaceAndSet(fechaFinalizacion, "Campo fecha fin vacío");
     }
 
    /** 

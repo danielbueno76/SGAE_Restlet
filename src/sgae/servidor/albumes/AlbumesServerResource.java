@@ -113,8 +113,7 @@ public class AlbumesServerResource extends ServerResource{
 		return result;
 	}
 	
-	//@Post("form")				//Post para añadir nuevos albumes sin poder escoger el identificador
-	
+	//@Post("form")				//Post para añadir nuevos albumes sin poder escoger el identificador	
 	public Representation post (Representation datos, Variant variant) {
 		Representation result = null;
 		if (MediaType.APPLICATION_WWW_FORM.isCompatible(variant.getMediaType())) {

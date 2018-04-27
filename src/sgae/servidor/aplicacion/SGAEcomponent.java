@@ -20,7 +20,7 @@ public class SGAEcomponent extends Component{
 		
 		setName("SGAE Server Component");
 		setDescription("Servidor de SGAE para almacenar informacion sobre grupos musicales");
-		setOwner("YO");
+		setOwner("ptpdx01");
 		setAuthor("RHB y DBP");
 		
 		Server server = new Server(new Context(), Protocol.HTTP, 8111);
@@ -30,7 +30,7 @@ public class SGAEcomponent extends Component{
 		getClients().add(client); //esto sirve para albumes
 		VirtualHost host = getDefaultHost();
 		host.attachDefault(new SGAEaplicacion());	
-		//host.attachDefault(new HelloClient());
+		
 		
 	}
 }

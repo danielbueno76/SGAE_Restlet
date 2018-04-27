@@ -1,5 +1,9 @@
 package sgae.nucleo.gruposMusicales;
 
+import java.text.ParseException;
+
+import sgae.util.Utils;
+
 /**
  * Clase que almacena información sobre las pistas de un álbum.
  * @author Manuel Rodríguez Cayetano. ETSIT UVa.
@@ -22,12 +26,18 @@ public class Pista {
 	 *            el nombre de la pista
 	 * @param duracion
 	 *            la duración de la pista
+	 * @throws ParseException
+	 *             si los parámetros idPista o nombre están vacíos, contienen sólo espacios
+	 *             o son null, o si el valor del parámetro duracion no es positivo
 	 */
-	public Pista(String idPista, String nombre, int duracion) {
+	public Pista(String idPista, String nombre, int duracion) throws ParseException {
 		super();
 		// Asigna campos básicos
-		this.idPista = idPista;
-		this.nombre = nombre;
+		this.idPista = Utils.testStringNullOrEmptyOrWhitespaceAndSet(idPista, "Campo idPista vacío");
+		this.nombre = Utils.testStringNullOrEmptyOrWhitespaceAndSet(nombre, "Campo nombre vacío");
+		if (duracion <= 0) {
+			throw new ParseException("La duración de la pista no puede ser negativa", 0);
+		}
 		this.duracion = duracion;
 	}
 
@@ -55,9 +65,12 @@ public class Pista {
 	 * 
 	 * @param nuevoNombre
 	 *            el nuevo nombre de la pista
+	 * @throws ParseException
+	 *             si el parámetro nuevoNombre está vacío, contiene sólo espacios
+	 *             o es null
 	 */
-	public void setNombre(String nuevoNombre) {
-		nombre = nuevoNombre;
+	public void setNombre(String nuevoNombre) throws ParseException {
+		this.nombre = Utils.testStringNullOrEmptyOrWhitespaceAndSet(nuevoNombre, "Campo nombre vacío");
 	}
 
 	/**
@@ -74,8 +87,12 @@ public class Pista {
 	 * 
 	 * @param nuevaDuracion
 	 *            la nueva duración de la pista
+	 * @throws ParseException si el valor del parámetro nuevaDuracion no es positivo
 	 */
-	public void setDuracion(int nuevaDuracion) {
+	public void setDuracion(int nuevaDuracion) throws ParseException {
+		if (duracion <= 0) {
+			throw new ParseException("La duración de la pista no puede ser negativa", 0);
+		}
 		duracion = nuevaDuracion;
 	}
 

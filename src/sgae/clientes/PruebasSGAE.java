@@ -250,7 +250,9 @@ public class PruebasSGAE {
 				System.err.println("Ha fallado una operación para la discográfica con CIF " + 
 						e.getCif() + " por la siguiente razón: " + 
 					e	.getCausaFallo());
-		}
+			}	catch (ParseException e) {
+				System.err.println("ParseException en las discograficas");
+			}
 
 	
 		///////////////////////////////////////////////////////////////////////
@@ -309,6 +311,8 @@ public class PruebasSGAE {
 			System.err.println("Ha fallado una operación para la compañía discográfica con CIF " + 
 				e.getCif() + " por la siguiente razón: " + 
 				e.getCausaFallo());
+		} catch (ParseException e) {
+			System.err.println("No se han introducido bien los datos");
 		}
 
 		// // /////////////////////////////////////////////////////////////////

@@ -61,7 +61,7 @@ public class PistasServerResource extends ServerResource{
 		if (MediaType.TEXT_PLAIN.isCompatible(variant.getMediaType())) {		
 			try {
 				for (Pista p: controladorGruposMusicales.recuperarPistas(grupoID,idAlbum)) {
-					result2.append((p == null) ? "" : p.getNombre()).append('\n');
+					result2.append((p == null) ? "" : "Título: " + p.getNombre() + "\tUri: " + p.getIdPista()).append('\n');
 				}
 			} catch (ExcepcionGruposMusicales e) {				
 				System.out.println("ExcepcionGruposMusicales  listarpistas --> No existe el grupo");
@@ -124,14 +124,15 @@ public class PistasServerResource extends ServerResource{
 			String Nombre= form.getFirstValue("NOMBRE");
 			String Duracion= form.getFirstValue("DURACION");
 			int duracion = Integer.parseInt(Duracion);
-	
-			System.out.println("CIF: " + CIF );
-			System.out.println("Album: " + idAlbum );
-			System.out.println("Nombre: " + Nombre);
-			System.out.println("Duracion: " + duracion);
+//	
+//			System.out.println("CIF: " + CIF );
+//			System.out.println("Album: " + idAlbum );
+//			System.out.println("Nombre: " + Nombre);
+//			System.out.println("Duracion: " + duracion);
 			 
 			try {
 				controladorGruposMusicales.anadirPista(CIF, idAlbum, Nombre, duracion);
+				String URI = getLocationRef().getIdentifier();
 				result =  new StringRepresentation("CIF: " + CIF +" Album: " + idAlbum+" Nombre: " + Nombre +"Duracion: "+Duracion,   MediaType.TEXT_PLAIN, Language.SPANISH, CharacterSet.ISO_8859_1);
 			} catch (ExcepcionAlbumes ex){
 				System.out.println("ExcepcionAlbumes Crearpista");
@@ -140,7 +141,12 @@ public class PistasServerResource extends ServerResource{
 			}catch (ExcepcionGruposMusicales ax) {
 				System.out.println("ExcepcionGruposMusicales Crearpista");
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			}catch (ExcepcionPistas ax) {
+				System.out.println("ExcepcionPistas Crearpista");
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 			}
+			
+			
 		}
 		return result;
 	}	
