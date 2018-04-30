@@ -1,8 +1,8 @@
 //
-// Este archivo ha sido generado por la arquitectura JavaTM para la implantación de la referencia de enlace (JAXB) XML v2.2.8-b130911.1802 
+// Este archivo ha sido generado por la arquitectura JavaTM para la implantaciÃ³n de la referencia de enlace (JAXB) XML v2.2.8-b130911.1802 
 // Visite <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
-// Todas las modificaciones realizadas en este archivo se perderán si se vuelve a compilar el esquema de origen. 
-// Generado el: 2018.04.25 a las 12:30:43 PM CEST 
+// Todas las modificaciones realizadas en este archivo se perderÃ¡n si se vuelve a compilar el esquema de origen. 
+// Generado el: 2018.04.30 a las 02:38:14 PM CEST 
 //
 
 
@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="CIF" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="nombre" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="fechacreacion" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="ejemplaresvendidos" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="uri1" type="{http://www.ptpd.tel.uva.es/ns/sgaerest/util/link}link"/>
  *         &lt;element name="uri2" type="{http://www.ptpd.tel.uva.es/ns/sgaerest/util/link}link"/>
  *       &lt;/sequence>
@@ -43,6 +44,7 @@ import javax.xml.bind.annotation.XmlType;
     "cif",
     "nombre",
     "fechacreacion",
+    "ejemplaresvendidos",
     "uri1",
     "uri2"
 })
@@ -55,6 +57,8 @@ public class Grupo {
     protected String nombre;
     @XmlElement(required = true)
     protected String fechacreacion;
+    @XmlElement(required = true)
+    protected String ejemplaresvendidos;
     @XmlElement(required = true)
     protected Link uri1;
     @XmlElement(required = true)
@@ -130,6 +134,30 @@ public class Grupo {
      */
     public void setFechacreacion(String value) {
         this.fechacreacion = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad ejemplaresvendidos.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getEjemplaresvendidos() {
+        return ejemplaresvendidos;
+    }
+
+    /**
+     * Define el valor de la propiedad ejemplaresvendidos.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setEjemplaresvendidos(String value) {
+        this.ejemplaresvendidos = value;
     }
 
     /**

@@ -92,6 +92,7 @@ xjc -p sgae.util.generated
                 <xs:element name="CIF" type="xs:string"/>
                 <xs:element name="nombre" type="xs:string"/>
         <xs:element name="fechacreacion" type="xs:string"/>
+ 	<xs:element name="ejemplaresvendidos" type="xs:string"/>
 	<xs:element name="uri1" type="sgaerestutillink:link"/>
 	<xs:element name="uri2" type="sgaerestutillink:link"/>
          </xs:sequence>

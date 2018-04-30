@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="es">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package sgae.servidor.gruposMusicales;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import java.util.List;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import org.restlet.data.Status;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import org.restlet.ext.jaxb.JaxbRepresentation;<a name="line.5"></a>
+<span class="sourceLineNo">006</span>import org.restlet.resource.Get;<a name="line.6"></a>
+<span class="sourceLineNo">007</span>import org.restlet.resource.ResourceException;<a name="line.7"></a>
+<span class="sourceLineNo">008</span>import org.restlet.resource.ServerResource;<a name="line.8"></a>
+<span class="sourceLineNo">009</span>import sgae.nucleo.gruposMusicales.ControladorGruposMusicales;<a name="line.9"></a>
+<span class="sourceLineNo">010</span>import sgae.nucleo.gruposMusicales.ExcepcionGruposMusicales;<a name="line.10"></a>
+<span class="sourceLineNo">011</span>import sgae.nucleo.personas.Persona;<a name="line.11"></a>
+<span class="sourceLineNo">012</span>import sgae.servidor.aplicacion.SGAEaplicacion;<a name="line.12"></a>
+<span class="sourceLineNo">013</span>import sgae.util.generated.Link;<a name="line.13"></a>
+<span class="sourceLineNo">014</span>import sgae.util.generated.PersonaInfoBreve;<a name="line.14"></a>
+<span class="sourceLineNo">015</span>import sgae.util.generated.Personas;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>/**<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * Clase que muestra miembros de un grupo musical.<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * @author Daniel Bueno Pacheco y Roberto Herreras Babón. ETSIT UVa.<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * @version 1.0<a name="line.19"></a>
+<span class="sourceLineNo">020</span> */<a name="line.20"></a>
+<span class="sourceLineNo">021</span>public class MiembrosServerResource extends ServerResource{<a name="line.21"></a>
+<span class="sourceLineNo">022</span>        /**Inicializamos la variable y controlador necesario para miembros*/<a name="line.22"></a>
+<span class="sourceLineNo">023</span>        SGAEaplicacion ref = (SGAEaplicacion)getApplication();<a name="line.23"></a>
+<span class="sourceLineNo">024</span>        ControladorGruposMusicales controladorGruposMusicales = ref.getControladorGruposMusicales();<a name="line.24"></a>
+<span class="sourceLineNo">025</span>        /**Variable local grupoID que contiene el Cif de un grupo.*/<a name="line.25"></a>
+<span class="sourceLineNo">026</span>        private String grupoID;<a name="line.26"></a>
+<span class="sourceLineNo">027</span>        <a name="line.27"></a>
+<span class="sourceLineNo">028</span>        /** <a name="line.28"></a>
+<span class="sourceLineNo">029</span>         * Metodo doInit que se ejecuta al acceder a esta clase<a name="line.29"></a>
+<span class="sourceLineNo">030</span>         */<a name="line.30"></a>
+<span class="sourceLineNo">031</span>        protected void doInit() throws ResourceException{               <a name="line.31"></a>
+<span class="sourceLineNo">032</span>                this.grupoID = getAttribute("CIFgrupo");<a name="line.32"></a>
+<span class="sourceLineNo">033</span>        }<a name="line.33"></a>
+<span class="sourceLineNo">034</span>        <a name="line.34"></a>
+<span class="sourceLineNo">035</span>        /** <a name="line.35"></a>
+<span class="sourceLineNo">036</span>         * Metodo get en formato texto plano sobre miembros<a name="line.36"></a>
+<span class="sourceLineNo">037</span>         * @return result datos solicitados en texto plano<a name="line.37"></a>
+<span class="sourceLineNo">038</span>         */<a name="line.38"></a>
+<span class="sourceLineNo">039</span>        @Get("txt")<a name="line.39"></a>
+<span class="sourceLineNo">040</span>        public String represent() {<a name="line.40"></a>
+<span class="sourceLineNo">041</span>                StringBuilder result = new StringBuilder();<a name="line.41"></a>
+<span class="sourceLineNo">042</span>                try {<a name="line.42"></a>
+<span class="sourceLineNo">043</span>                        //En este bucle nos devuelven los miembros actuales que existen previamente.<a name="line.43"></a>
+<span class="sourceLineNo">044</span>                        for (Persona persona: controladorGruposMusicales.recuperarMiembros(grupoID)) {<a name="line.44"></a>
+<span class="sourceLineNo">045</span>                                //Añadimos la información a mostrar de los miembros actuales<a name="line.45"></a>
+<span class="sourceLineNo">046</span>                                result.append((persona.verDescripcionBreve() == null) ? "" : "Miembros actuales:\t"+persona.verDescripcionBreve()+"\tUri: /../../../personas/"+persona.getDni()).append('\n');<a name="line.46"></a>
+<span class="sourceLineNo">047</span>                        }<a name="line.47"></a>
+<span class="sourceLineNo">048</span>                }  catch (ExcepcionGruposMusicales e) {<a name="line.48"></a>
+<span class="sourceLineNo">049</span>                        System.out.println("ExcepcionGruposMusicales No existe el grupo");//No existe el grupo solicitado<a name="line.49"></a>
+<span class="sourceLineNo">050</span>                        throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e.getCausaFallo());          //Se devuelve un error --&gt; Recurso no encontrado.<a name="line.50"></a>
+<span class="sourceLineNo">051</span>                }<a name="line.51"></a>
+<span class="sourceLineNo">052</span>                try {<a name="line.52"></a>
+<span class="sourceLineNo">053</span>                        //En este bucle nos devuelven los miembros anteriores que existen previamente.<a name="line.53"></a>
+<span class="sourceLineNo">054</span>                        for (Persona persona: controladorGruposMusicales.recuperarMiembrosAnteriores(grupoID)) {<a name="line.54"></a>
+<span class="sourceLineNo">055</span>                                //Añadimos la información a mostrar de los miembros actuales<a name="line.55"></a>
+<span class="sourceLineNo">056</span>                                result.append((persona.verDescripcionBreve() == null) ? "" : "Miembros anteriores:\t"+persona.verDescripcionBreve()+"\tUri: /../../../personas/"+persona.getDni()).append('\n');<a name="line.56"></a>
+<span class="sourceLineNo">057</span>                        }<a name="line.57"></a>
+<span class="sourceLineNo">058</span>                }  catch (ExcepcionGruposMusicales e) {<a name="line.58"></a>
+<span class="sourceLineNo">059</span>                        System.out.println("ExcepcionGruposMusicales No existe el grupo");//No existe el grupo solicitado<a name="line.59"></a>
+<span class="sourceLineNo">060</span>                        throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,e.getCausaFallo());           //Se devuelve un error --&gt; Recurso no encontrado.<a name="line.60"></a>
+<span class="sourceLineNo">061</span>                }<a name="line.61"></a>
+<span class="sourceLineNo">062</span>                                <a name="line.62"></a>
+<span class="sourceLineNo">063</span>                return result.toString();//Devolvemos la información solicitada en String<a name="line.63"></a>
+<span class="sourceLineNo">064</span>        }<a name="line.64"></a>
+<span class="sourceLineNo">065</span>        <a name="line.65"></a>
+<span class="sourceLineNo">066</span>        <a name="line.66"></a>
+<span class="sourceLineNo">067</span>        /** <a name="line.67"></a>
+<span class="sourceLineNo">068</span>         * Metodo get en formato xml sobre miembros<a name="line.68"></a>
+<span class="sourceLineNo">069</span>         * @return result datos solicitados en xml<a name="line.69"></a>
+<span class="sourceLineNo">070</span>         */<a name="line.70"></a>
+<span class="sourceLineNo">071</span>        @Get("xml")<a name="line.71"></a>
+<span class="sourceLineNo">072</span>        public JaxbRepresentation&lt;Personas&gt; toXml() {<a name="line.72"></a>
+<span class="sourceLineNo">073</span>                <a name="line.73"></a>
+<span class="sourceLineNo">074</span>                Personas personasXML = new Personas();  //Objeto de tipo grupos<a name="line.74"></a>
+<span class="sourceLineNo">075</span>                final List&lt;PersonaInfoBreve&gt; personaInfoBreve= personasXML.getPersonaInfoBreve();//Creamos una lista que contiene objetos personasinfobreve<a name="line.75"></a>
+<span class="sourceLineNo">076</span>                <a name="line.76"></a>
+<span class="sourceLineNo">077</span>                try {<a name="line.77"></a>
+<span class="sourceLineNo">078</span>                        for(sgae.nucleo.personas.Persona p: controladorGruposMusicales.recuperarMiembros(grupoID) ) {//En este bucle nos devuelven los miembros actuales, siendo objetos de tipo Persona.<a name="line.78"></a>
+<span class="sourceLineNo">079</span>                                <a name="line.79"></a>
+<span class="sourceLineNo">080</span>                                //Creamos un objeto PersonaInfoBreve y le añadimos la información devuelta en cada iteración del bucle.<a name="line.80"></a>
+<span class="sourceLineNo">081</span>                                PersonaInfoBreve personaInfo = new PersonaInfoBreve();  <a name="line.81"></a>
+<span class="sourceLineNo">082</span>                                personaInfo.setDNI(p.getDni());<a name="line.82"></a>
+<span class="sourceLineNo">083</span>                                personaInfo.setApellidos(p.getApellidos());<a name="line.83"></a>
+<span class="sourceLineNo">084</span>                                personaInfo.setNombre(p.getNombre());<a name="line.84"></a>
+<span class="sourceLineNo">085</span>                                //Creamos un objeto de tipo Link y le añadimos los valores necesarios.<a name="line.85"></a>
+<span class="sourceLineNo">086</span>                                Link link = new Link();<a name="line.86"></a>
+<span class="sourceLineNo">087</span>                                link.setHref("/../../../personas/"+p.getDni());<a name="line.87"></a>
+<span class="sourceLineNo">088</span>                                link.setTitle("Miembros actuales");<a name="line.88"></a>
+<span class="sourceLineNo">089</span>                                link.setType("simple");<a name="line.89"></a>
+<span class="sourceLineNo">090</span>                                personaInfo.setUri(link);<a name="line.90"></a>
+<span class="sourceLineNo">091</span>                                //Ahora añadidmos a lista de PersonasInfoBreve el objeto PersonaInfoBreve con la información devuelta por el bucle.<a name="line.91"></a>
+<span class="sourceLineNo">092</span>                                personaInfoBreve.add(personaInfo);<a name="line.92"></a>
+<span class="sourceLineNo">093</span>                                <a name="line.93"></a>
+<span class="sourceLineNo">094</span>                        }<a name="line.94"></a>
+<span class="sourceLineNo">095</span>                        <a name="line.95"></a>
+<span class="sourceLineNo">096</span>                        for(sgae.nucleo.personas.Persona p: controladorGruposMusicales.recuperarMiembrosAnteriores(grupoID) ) {//En este bucle nos devuelven los miembros anteriores, siendo objetos de tipo Persona.<a name="line.96"></a>
+<span class="sourceLineNo">097</span>                                //Creamos un objeto PersonaInfoBreve y le añadimos la información devuelta en cada iteración del bucle.<a name="line.97"></a>
+<span class="sourceLineNo">098</span>                                PersonaInfoBreve personaInfo = new PersonaInfoBreve();  <a name="line.98"></a>
+<span class="sourceLineNo">099</span>                                personaInfo.setDNI(p.getDni());<a name="line.99"></a>
+<span class="sourceLineNo">100</span>                                personaInfo.setApellidos(p.getApellidos());<a name="line.100"></a>
+<span class="sourceLineNo">101</span>                                personaInfo.setNombre(p.getNombre());<a name="line.101"></a>
+<span class="sourceLineNo">102</span>                                //Creamos un objeto de tipo Link y le añadimos los valores necesarios.<a name="line.102"></a>
+<span class="sourceLineNo">103</span>                                Link link = new Link();<a name="line.103"></a>
+<span class="sourceLineNo">104</span>                                link.setHref("/../../../personas/"+p.getDni());<a name="line.104"></a>
+<span class="sourceLineNo">105</span>                                link.setTitle("Miembros anteriores");<a name="line.105"></a>
+<span class="sourceLineNo">106</span>                                link.setType("simple");<a name="line.106"></a>
+<span class="sourceLineNo">107</span>                                personaInfo.setUri(link);<a name="line.107"></a>
+<span class="sourceLineNo">108</span>                                //Ahora añadidmos a lista de PersonasInfoBreve el objeto PersonaInfoBreve con la información devuelta por el bucle.<a name="line.108"></a>
+<span class="sourceLineNo">109</span>                                personaInfoBreve.add(personaInfo);                              <a name="line.109"></a>
+<span class="sourceLineNo">110</span>                        }<a name="line.110"></a>
+<span class="sourceLineNo">111</span>                } catch (ExcepcionGruposMusicales e) {<a name="line.111"></a>
+<span class="sourceLineNo">112</span>                        System.out.println("ExcepcionGruposMusicales a la hora de listar miembros");//No existe el grupo solicitado<a name="line.112"></a>
+<span class="sourceLineNo">113</span>                        throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,e.getCausaFallo());//Se devuelve un error --&gt; Recurso no encontrado.<a name="line.113"></a>
+<span class="sourceLineNo">114</span>                }<a name="line.114"></a>
+<span class="sourceLineNo">115</span>                //Se crea el objeto de tipo JaxbRepresentation result con el formato especificado en la teoría<a name="line.115"></a>
+<span class="sourceLineNo">116</span>                JaxbRepresentation &lt;Personas&gt; result = new JaxbRepresentation&lt;Personas&gt; (personasXML);<a name="line.116"></a>
+<span class="sourceLineNo">117</span>                result.setFormattedOutput(true);<a name="line.117"></a>
+<span class="sourceLineNo">118</span>                <a name="line.118"></a>
+<span class="sourceLineNo">119</span>                return result;//Devuelve la variable de tipo JaxbRepresentation<a name="line.119"></a>
+<span class="sourceLineNo">120</span>        }<a name="line.120"></a>
+<span class="sourceLineNo">121</span><a name="line.121"></a>
+<span class="sourceLineNo">122</span>}<a name="line.122"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

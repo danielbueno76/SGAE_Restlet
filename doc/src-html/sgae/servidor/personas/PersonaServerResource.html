@@ -1,0 +1,223 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="es">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package sgae.servidor.personas;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import java.text.ParseException;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import org.restlet.data.Form;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import org.restlet.data.MediaType;<a name="line.5"></a>
+<span class="sourceLineNo">006</span>import org.restlet.data.Status;<a name="line.6"></a>
+<span class="sourceLineNo">007</span>import org.restlet.ext.jaxb.JaxbRepresentation;<a name="line.7"></a>
+<span class="sourceLineNo">008</span>import org.restlet.representation.Representation;<a name="line.8"></a>
+<span class="sourceLineNo">009</span>import org.restlet.representation.StringRepresentation;<a name="line.9"></a>
+<span class="sourceLineNo">010</span>import org.restlet.resource.Delete;<a name="line.10"></a>
+<span class="sourceLineNo">011</span>import org.restlet.resource.Get;<a name="line.11"></a>
+<span class="sourceLineNo">012</span>import org.restlet.resource.Put;<a name="line.12"></a>
+<span class="sourceLineNo">013</span>import org.restlet.resource.ResourceException;<a name="line.13"></a>
+<span class="sourceLineNo">014</span>import org.restlet.resource.ServerResource;<a name="line.14"></a>
+<span class="sourceLineNo">015</span>import sgae.nucleo.personas.ControladorPersonas;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>import sgae.nucleo.personas.ExcepcionPersonas;<a name="line.16"></a>
+<span class="sourceLineNo">017</span>import sgae.nucleo.personas.Persona;<a name="line.17"></a>
+<span class="sourceLineNo">018</span>import sgae.servidor.aplicacion.SGAEaplicacion;<a name="line.18"></a>
+<span class="sourceLineNo">019</span>/**<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * Clase que muestra, modifica y elimina una persona específica.<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * @author Daniel Bueno Pacheco y Roberto Herreras Babón. ETSIT UVa.<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * @version 1.0<a name="line.22"></a>
+<span class="sourceLineNo">023</span> */<a name="line.23"></a>
+<span class="sourceLineNo">024</span><a name="line.24"></a>
+<span class="sourceLineNo">025</span>public class PersonaServerResource extends ServerResource{<a name="line.25"></a>
+<span class="sourceLineNo">026</span>        /**Inicializamos las variables y controladores necesarios para Persona*/<a name="line.26"></a>
+<span class="sourceLineNo">027</span>        SGAEaplicacion ref = (SGAEaplicacion)getApplication();<a name="line.27"></a>
+<span class="sourceLineNo">028</span>        ControladorPersonas controladorPersonas = ref.getControladorPersonas();<a name="line.28"></a>
+<span class="sourceLineNo">029</span>        /**Variable local personaID que contiene el id de una persona.*/<a name="line.29"></a>
+<span class="sourceLineNo">030</span>        private String personaID;<a name="line.30"></a>
+<span class="sourceLineNo">031</span>        <a name="line.31"></a>
+<span class="sourceLineNo">032</span>        /** <a name="line.32"></a>
+<span class="sourceLineNo">033</span>         * Metodo doInit que se ejecuta al acceder a esta clase<a name="line.33"></a>
+<span class="sourceLineNo">034</span>         */<a name="line.34"></a>
+<span class="sourceLineNo">035</span>        protected void doInit() throws ResourceException{               <a name="line.35"></a>
+<span class="sourceLineNo">036</span>                this.personaID = getAttribute("DNI");<a name="line.36"></a>
+<span class="sourceLineNo">037</span>        }<a name="line.37"></a>
+<span class="sourceLineNo">038</span>        <a name="line.38"></a>
+<span class="sourceLineNo">039</span><a name="line.39"></a>
+<span class="sourceLineNo">040</span>        /** <a name="line.40"></a>
+<span class="sourceLineNo">041</span>         * Metodo get en formato texto plano sobre una  persona<a name="line.41"></a>
+<span class="sourceLineNo">042</span>         * @throws ExcepcionPersonas No existe la persona solicitada<a name="line.42"></a>
+<span class="sourceLineNo">043</span>         * @return result datos solicitados en texto plano<a name="line.43"></a>
+<span class="sourceLineNo">044</span>         */<a name="line.44"></a>
+<span class="sourceLineNo">045</span>        @Get("txt")<a name="line.45"></a>
+<span class="sourceLineNo">046</span>        public String represent(){<a name="line.46"></a>
+<span class="sourceLineNo">047</span>                String DescripcionCompleta=null;<a name="line.47"></a>
+<span class="sourceLineNo">048</span>                try {<a name="line.48"></a>
+<span class="sourceLineNo">049</span>                        //Almacenamos en la variable de tipo String la información completa de la persona. Luego este contenido se muestra.<a name="line.49"></a>
+<span class="sourceLineNo">050</span>                        DescripcionCompleta= controladorPersonas.verPersona(this.personaID);<a name="line.50"></a>
+<span class="sourceLineNo">051</span>                }<a name="line.51"></a>
+<span class="sourceLineNo">052</span>                catch(ExcepcionPersonas ex) {<a name="line.52"></a>
+<span class="sourceLineNo">053</span>                        System.out.println("ExcepcionPersonas No existe la persona");//No existe la persona solicitada<a name="line.53"></a>
+<span class="sourceLineNo">054</span>                throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, ex.getCausaFallo());//Se devuelve un error --&gt; Recurso no encontrado.<a name="line.54"></a>
+<span class="sourceLineNo">055</span>                }<a name="line.55"></a>
+<span class="sourceLineNo">056</span>                return DescripcionCompleta;//Devolvemos la información solicitada<a name="line.56"></a>
+<span class="sourceLineNo">057</span>        }<a name="line.57"></a>
+<span class="sourceLineNo">058</span>        <a name="line.58"></a>
+<span class="sourceLineNo">059</span>        <a name="line.59"></a>
+<span class="sourceLineNo">060</span>        /** <a name="line.60"></a>
+<span class="sourceLineNo">061</span>         * Metodo get en formato xml sobre persona<a name="line.61"></a>
+<span class="sourceLineNo">062</span>         * @throws ExcepcionPersonas No existe la persona solicitada<a name="line.62"></a>
+<span class="sourceLineNo">063</span>         * @return result datos solicitados en xml<a name="line.63"></a>
+<span class="sourceLineNo">064</span>         */<a name="line.64"></a>
+<span class="sourceLineNo">065</span>        @Get("xml")<a name="line.65"></a>
+<span class="sourceLineNo">066</span>        public JaxbRepresentation&lt;sgae.util.generated.Persona&gt; toXml() {<a name="line.66"></a>
+<span class="sourceLineNo">067</span>                JaxbRepresentation &lt;sgae.util.generated.Persona&gt; result = null;<a name="line.67"></a>
+<span class="sourceLineNo">068</span>                try {<a name="line.68"></a>
+<span class="sourceLineNo">069</span>                        //Creamos un objeto Persona y le añadimos la información devuelta .<a name="line.69"></a>
+<span class="sourceLineNo">070</span>                        Persona p = controladorPersonas.recuperarPersona(this.personaID);                       <a name="line.70"></a>
+<span class="sourceLineNo">071</span>                        sgae.util.generated.Persona personaInfo = new sgae.util.generated.Persona();    <a name="line.71"></a>
+<span class="sourceLineNo">072</span>                        personaInfo.setDNI(p.getDni());<a name="line.72"></a>
+<span class="sourceLineNo">073</span>                        personaInfo.setNombre(p.getNombre());<a name="line.73"></a>
+<span class="sourceLineNo">074</span>                        personaInfo.setApellidos(p.getApellidos());<a name="line.74"></a>
+<span class="sourceLineNo">075</span>                        personaInfo.setFechanacimiento(p.getFechaNacimiento());<a name="line.75"></a>
+<span class="sourceLineNo">076</span>                        //Se crea el objeto JaxbRepresentation result con el formato especificado en la teoría<a name="line.76"></a>
+<span class="sourceLineNo">077</span>                        result = new JaxbRepresentation&lt;sgae.util.generated.Persona&gt; (personaInfo);<a name="line.77"></a>
+<span class="sourceLineNo">078</span>                        result.setFormattedOutput(true);<a name="line.78"></a>
+<span class="sourceLineNo">079</span>                }<a name="line.79"></a>
+<span class="sourceLineNo">080</span>                catch(ExcepcionPersonas ex) {<a name="line.80"></a>
+<span class="sourceLineNo">081</span>                        System.out.println("ExcepcionPersonas No existe la persona");//No existe la persona solicitada<a name="line.81"></a>
+<span class="sourceLineNo">082</span>                throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, ex.getCausaFallo());//Se devuelve un error --&gt; Recurso no encontrado.<a name="line.82"></a>
+<span class="sourceLineNo">083</span>                }<a name="line.83"></a>
+<span class="sourceLineNo">084</span>                <a name="line.84"></a>
+<span class="sourceLineNo">085</span>                return result;//Devuelve la variable de tipo JaxbRepresentation<a name="line.85"></a>
+<span class="sourceLineNo">086</span>                <a name="line.86"></a>
+<span class="sourceLineNo">087</span><a name="line.87"></a>
+<span class="sourceLineNo">088</span>        }<a name="line.88"></a>
+<span class="sourceLineNo">089</span>        <a name="line.89"></a>
+<span class="sourceLineNo">090</span>        /** <a name="line.90"></a>
+<span class="sourceLineNo">091</span>         * Metodo delete para borrar la persona que especifiquemos<a name="line.91"></a>
+<span class="sourceLineNo">092</span>         * @throws ExcepcionPersonas No existe la persona solicitada<a name="line.92"></a>
+<span class="sourceLineNo">093</span>         */<a name="line.93"></a>
+<span class="sourceLineNo">094</span>        @Delete<a name="line.94"></a>
+<span class="sourceLineNo">095</span>        public void remove(){<a name="line.95"></a>
+<span class="sourceLineNo">096</span>                try {<a name="line.96"></a>
+<span class="sourceLineNo">097</span>                        //borramos la  persona<a name="line.97"></a>
+<span class="sourceLineNo">098</span>                        controladorPersonas.borrarPersona(this.personaID);<a name="line.98"></a>
+<span class="sourceLineNo">099</span>                        throw new ResourceException(Status.SUCCESS_OK, "Se ha borrado con éxito");//Se ha borrado con exito.<a name="line.99"></a>
+<span class="sourceLineNo">100</span>                }catch(ExcepcionPersonas ex) {<a name="line.100"></a>
+<span class="sourceLineNo">101</span>                        System.out.println("ExcepcionPersonas No existe la persona");//No existe la persona solicitada<a name="line.101"></a>
+<span class="sourceLineNo">102</span>                throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, ex.getCausaFallo());//Se devuelve un error --&gt; Recurso no encontrado.<a name="line.102"></a>
+<span class="sourceLineNo">103</span>                }<a name="line.103"></a>
+<span class="sourceLineNo">104</span>                <a name="line.104"></a>
+<span class="sourceLineNo">105</span>                <a name="line.105"></a>
+<span class="sourceLineNo">106</span>        }<a name="line.106"></a>
+<span class="sourceLineNo">107</span>        <a name="line.107"></a>
+<span class="sourceLineNo">108</span>        /** <a name="line.108"></a>
+<span class="sourceLineNo">109</span>         * Metodo put para crear una personas.<a name="line.109"></a>
+<span class="sourceLineNo">110</span>         * @param datos Variable en la cual recibimos los datos enviados por el cliente para modificar el album.<a name="line.110"></a>
+<span class="sourceLineNo">111</span>         * @throws ParseException Excepcion producida cuando el cliente envía los datos para crear o  modificar de manera errónea.<a name="line.111"></a>
+<span class="sourceLineNo">112</span>         * @throws ExcepcionPersonas No existe la persona solicitada<a name="line.112"></a>
+<span class="sourceLineNo">113</span>         * @return result datos solicitados en el formato solicitado<a name="line.113"></a>
+<span class="sourceLineNo">114</span>         */<a name="line.114"></a>
+<span class="sourceLineNo">115</span>        @Put("form-data")<a name="line.115"></a>
+<span class="sourceLineNo">116</span>        public Representation annadircuenta (Representation datos){<a name="line.116"></a>
+<span class="sourceLineNo">117</span>                //Capturamos los datos de la cabecera<a name="line.117"></a>
+<span class="sourceLineNo">118</span>                Form form = new Form(datos);<a name="line.118"></a>
+<span class="sourceLineNo">119</span>                //Ejemplo: DNI=00000000B&amp;NOMBRE=Dani&amp;APELLIDOS=Bueno Pacheco&amp;FECHANACIMIENTO=14-04-1995<a name="line.119"></a>
+<span class="sourceLineNo">120</span>                //Almacenamos los datos que nos pasan.<a name="line.120"></a>
+<span class="sourceLineNo">121</span>                String DNI= this.personaID;<a name="line.121"></a>
+<span class="sourceLineNo">122</span>                String Nombre= form.getFirstValue("NOMBRE");<a name="line.122"></a>
+<span class="sourceLineNo">123</span>                String Apellidos= form.getFirstValue("APELLIDOS");<a name="line.123"></a>
+<span class="sourceLineNo">124</span>                String fechanacimiento= form.getFirstValue("FECHANACIMIENTO");<a name="line.124"></a>
+<span class="sourceLineNo">125</span>//              //Mostramos los datos almacendos para ver si están bien.<a name="line.125"></a>
+<span class="sourceLineNo">126</span>//              System.out.println("DNI: " + DNI );<a name="line.126"></a>
+<span class="sourceLineNo">127</span>//              System.out.println("Nombre: " + Nombre);<a name="line.127"></a>
+<span class="sourceLineNo">128</span>//              System.out.println("Apellidos: " + Apellidos);<a name="line.128"></a>
+<span class="sourceLineNo">129</span>//              System.out.println("Fecha de nacimiento: " + fechanacimiento);<a name="line.129"></a>
+<span class="sourceLineNo">130</span>                Representation result = null;<a name="line.130"></a>
+<span class="sourceLineNo">131</span>                 <a name="line.131"></a>
+<span class="sourceLineNo">132</span>                try {<a name="line.132"></a>
+<span class="sourceLineNo">133</span>                        //Creamos la persona con el DNI especificado<a name="line.133"></a>
+<span class="sourceLineNo">134</span>                        controladorPersonas.crearPersona(DNI, Nombre, Apellidos, fechanacimiento);<a name="line.134"></a>
+<span class="sourceLineNo">135</span>                        //Almacenamos la información en la variable result para mostrarla después.<a name="line.135"></a>
+<span class="sourceLineNo">136</span>                        result =  new StringRepresentation("DNI: " + DNI +" Nombre: " + Nombre+" Apellidos: " + Apellidos+" Fecha de nacimiento: " + fechanacimiento,   MediaType.APPLICATION_WWW_FORM);<a name="line.136"></a>
+<span class="sourceLineNo">137</span>                }catch(ExcepcionPersonas ex) {<a name="line.137"></a>
+<span class="sourceLineNo">138</span>                        System.out.println("ExcepcionPersonas No existe la persona");//No existe la persona solicitada<a name="line.138"></a>
+<span class="sourceLineNo">139</span>                throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, ex.getCausaFallo());//Se devuelve un error --&gt; Recurso no encontrado.<a name="line.139"></a>
+<span class="sourceLineNo">140</span>                }catch (ParseException ax) {<a name="line.140"></a>
+<span class="sourceLineNo">141</span>                        System.out.println("ParseException crearPersona");//El cliente ha enviado los datos de manera errónea.<a name="line.141"></a>
+<span class="sourceLineNo">142</span>                         throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Te falta un parámetro o has enviado un parámetro con una sintaxis errónea");//Se devuelve un error --&gt; El cliente ha enviado mal la información<a name="line.142"></a>
+<span class="sourceLineNo">143</span>                }<a name="line.143"></a>
+<span class="sourceLineNo">144</span>                <a name="line.144"></a>
+<span class="sourceLineNo">145</span>                getResponse().setStatus(Status.SUCCESS_CREATED, "Se ha creado con exito");<a name="line.145"></a>
+<span class="sourceLineNo">146</span>                return result;//Devuelve la variable de tipo StringRepresentation<a name="line.146"></a>
+<span class="sourceLineNo">147</span><a name="line.147"></a>
+<span class="sourceLineNo">148</span>        }<a name="line.148"></a>
+<span class="sourceLineNo">149</span><a name="line.149"></a>
+<span class="sourceLineNo">150</span><a name="line.150"></a>
+<span class="sourceLineNo">151</span>}<a name="line.151"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>
