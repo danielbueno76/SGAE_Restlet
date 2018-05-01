@@ -58,7 +58,7 @@ public class HelloClient {
 			System.err.println(e.getResponse().getEntityAsText());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			System.err.println("Error en la lectura de la respuesta del servidor");
+			System.err.println("Error en la respuesta del servidor");
 		}
 		System.out.println();
 		
@@ -101,11 +101,11 @@ public class HelloClient {
 				System.out.println(respuesta.getText());
 			}
 		}catch(ResourceException e){
-			System.err.println("Error al listar los grupos. Respuesta recibida: "+e.getStatus().getDescription());
+			System.err.println("Error al listar los grupos. Respuesta: "+e.getStatus().getDescription());
 			System.err.println(e.getResponse().getEntityAsText());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			System.err.println("Error en la lectura de la respuesta del servidor");
+			System.err.println("Error en la respuesta del servidor");
 		}
 		System.out.println();
 		
@@ -123,7 +123,7 @@ public class HelloClient {
 				System.out.println("No se ha añadido el miembro 123456789A al grupo Z0123456Z . Error: "+annadirMiembroClientResource.getStatus().getCode()+" "+annadirMiembroClientResource.getStatus().getDescription());
 		
 		} catch (ResourceException e) {
-			System.err.println("Error en la creación del grupo. Respuesta recibida: "+e.getStatus().getDescription());
+			System.err.println("Error en la creación del grupo. Respuesta: "+e.getStatus().getDescription());
 		}
 		
 		//Listar los miembros
@@ -152,7 +152,7 @@ public class HelloClient {
 			System.err.println(e.getResponse().getEntityAsText());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			System.err.println("Error en la lectura de la respuesta del servidor");
+			System.err.println("Error en la respuesta del servidor");
 		}
 		System.out.println();
 
@@ -170,7 +170,7 @@ public class HelloClient {
 				System.out.println("No se ha eliminado el miembro 123456789A al grupo Z0123456Z . Error: "+eliminarMiembroClientResource.getStatus().getCode()+" "+eliminarMiembroClientResource.getStatus().getDescription());
 		
 		} catch (ResourceException e) {
-			System.err.println("Error en la creación del grupo. Respuesta recibida: "+e.getStatus().getDescription());
+			System.err.println("Error en la creación del grupo. Respuesta: "+e.getStatus().getDescription());
 		}
 		
 		//Fallos
@@ -189,7 +189,7 @@ public class HelloClient {
 				System.out.println("No se ha creado el album. Error: "+crearAlbumClientResource.getStatus().getCode()+" "+crearAlbumClientResource.getStatus().getDescription());
 		
 		} catch (ResourceException e) {
-			System.err.println("Error en la creación del grupo. Respuesta recibida: "+e.getStatus().getDescription());
+			System.err.println("Error en la creación del grupo. Respuesta: "+e.getStatus().getDescription());
 		}
 		
 		
@@ -220,7 +220,7 @@ public class HelloClient {
 			System.err.println(e.getResponse().getEntityAsText());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			System.err.println("Error en la lectura de la respuesta del servidor");
+			System.err.println("Error en la respuesta del servidor");
 		}
 		System.out.println();
 		
@@ -239,7 +239,7 @@ public class HelloClient {
 				System.out.println("No se ha creado la pista. Error: "+crearPistaClientResource.getStatus().getCode()+" "+crearPistaClientResource.getStatus().getDescription());
 		
 		} catch (ResourceException e) {
-			System.err.println("Error en la creación del grupo. Respuesta recibida: "+e.getStatus().getDescription());
+			System.err.println("Error en la creación del grupo. Respuesta: "+e.getStatus().getDescription());
 		}
 		
 		//Correcto
@@ -269,7 +269,7 @@ public class HelloClient {
 			System.err.println(e.getResponse().getEntityAsText());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			System.err.println("Error en la lectura de la respuesta del servidor");
+			System.err.println("Error en la respuesta del servidor");
 		}
 		System.out.println();
 		
@@ -285,8 +285,8 @@ public class HelloClient {
 				System.out.println("No se ha eliminada la pista. Error: "+borrarPistaClientResource.getStatus().getCode()+" "+borrarPistaClientResource.getStatus().getDescription());
 		
 		} catch (ResourceException e) {
-			System.err.println("Error en la eliminacion de la pista. Respuesta recibida: "+e.getStatus().getDescription());
-		}
+			System.err.println("Error en la eliminacion de la pista. Respuesta: "+e.getStatus().getDescription());
+		} 
 	}
 
 }

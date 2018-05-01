@@ -153,7 +153,9 @@ public class AlbumesServerResource extends ServerResource{
 				//Creamos un album llamando al metodo crearAlbum con la información necesaria
 				String idAlbum=controladorGruposMusicales.crearAlbum(CIF, titulo, fechaPublicacion, ejemplaresVendidos);	
 				//Almacenamos la información que vamos a mostrar al crear el Album.
-				 result =  new StringRepresentation("CIF: " + CIF +" Título: " + titulo+" Fecha de publicación: " + fechaPublicacion+" Número de ejemplares vendidos: " + ejemplaresVendidos + " Uri: " + idAlbum+ "/",   MediaType.TEXT_PLAIN, Language.SPANISH, CharacterSet.ISO_8859_1);
+				 result =  new StringRepresentation("CIF: " + CIF +"\t Título: " + titulo+" \tFecha de publicación: " + fechaPublicacion+" \tNúmero de ejemplares vendidos: " + ejemplaresVendidos + " \tUri: " + idAlbum+ "/",   MediaType.TEXT_PLAIN, Language.SPANISH, CharacterSet.ISO_8859_1);
+				 getResponse().setStatus(Status.SUCCESS_CREATED, "Se ha creado con exito");
+				
 			}catch (ParseException ax) { //Salta esta excepción si a la hora de crear un album el cliente envia datos de manera erronea.
 				 System.out.println("ParseException CrearAlbum");
 				 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Te falta un parámetro o has enviado un parámetro con una sintaxis errónea");
@@ -165,8 +167,13 @@ public class AlbumesServerResource extends ServerResource{
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Numero de ejemplares mal introducido");		//Se devuelve un error --> Recurso no encontrado.
 			}
 		}
-		getResponse().setStatus(Status.SUCCESS_CREATED, "Se ha creado con exito");
-		return result; //Devolvemos la variable de tipo Representation
+		else {
+			result = null;
+			getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST, "Cabecera mal introducida");
+			
+		}
+		return result;  //Devolvemos la variable de tipo Representation
+		
 
 	}
 	

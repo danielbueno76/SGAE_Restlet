@@ -135,72 +135,20 @@ public class GrupoServerResource extends ServerResource{
 //		System.out.println("Nombre: " + Nombre);
 //		System.out.println("Fecha de creacion: " + FechaCreacion);
 		//Queremos crear un grupo y no añadir miembros
-		if (DNI==null &&Nombre!=null &&FechaCreacion!=null) {	
-			
-			try {
-				//Creamos un grupo
-				controladorGruposMusicales.crearGrupoMusical(CIF, Nombre, FechaCreacion);
-				//Almacenamos la información que vamos a mostrar al crear el grupo.
-				result =  new StringRepresentation("CIF: " + CIF +"\tNombre: " + Nombre+"\tFecha de creacion: " + FechaCreacion,   MediaType.APPLICATION_WWW_FORM);
-				getResponse().setStatus(Status.SUCCESS_CREATED, "Se ha creado con exito");
-			} 
-			//Controlamos las posibles excepciones que se pueden producir
-			catch (ExcepcionGruposMusicales ex){
-				System.out.println("ExcepcionGruposMusicales crearGrupo");//No existe el grupo solicitado
-				throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, ex.getCausaFallo());//Se devuelve un error --> Recurso no encontrado.
-				
-			}catch (ParseException ax) {
-				System.out.println("ParseException creargrupo");
-				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Te falta un parámetro o has enviado un parámetro con una sintaxis errónea");//Se devuelve un error --> Los datos enviados por el usuario han sido enviado de manera errónea.
-			}
-		}
-		//Queremos crear un grupo y añadir miembros
-		else if (DNI!=null &&Nombre!=null &&FechaCreacion!=null) {
-			String[] arrayDNIs = DNI.split(",");//Dividimos la ristra de DNIS, en varios String.
-			int i=0;
-			String listamiembros = "";
-			try {
-				//Creamos un grupo
-				controladorGruposMusicales.crearGrupoMusical(CIF, Nombre, FechaCreacion);
-				//añadimos los miembros
-				for(i=0;i<arrayDNIs.length;i++) {
-					//Vamos añadiendo en cada iteración del bucle los nuevos miembros
-					controladorGruposMusicales.anadirMiembro(CIF, arrayDNIs[i]);
-					listamiembros=listamiembros+arrayDNIs[i]+"\t";
-				}
-				//Almacenamos la información que vamos a mostrar al crear el grupo.
-				result =  new StringRepresentation("CIF: " + CIF +"\tNombre: " + Nombre+"\tFecha de creacion: " + FechaCreacion +"\tMiembros añadidos: "+listamiembros,   MediaType.APPLICATION_WWW_FORM);
-				getResponse().setStatus(Status.SUCCESS_CREATED, "Se ha creado con exito");
-			} 
-			//Controlamos las posibles excepciones que se pueden producir
-			catch (ExcepcionGruposMusicales ex){
-				System.out.println("ExcepcionGruposMusicales crearGrupo");//No existe el grupo solicitado
-				throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, ex.getCausaFallo());//Se devuelve un error --> Recurso no encontrado.
-				
-			}catch (ParseException ax) {
-				System.out.println("ParseException creargrupo");
-				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Te falta un parámetro o has enviado un parámetro con una sintaxis errónea");//Se devuelve un error --> Los datos enviados por el usuario han sido enviado de manera errónea.
-			} catch (ExcepcionPersonas e) {
-				System.out.println("ExcepcionPersonas añadir Miembro");//No existe la persona solicitado
-				 throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e.getCausaFallo());//Se devuelve un error --> Recurso no encontrado.
-			
-			}
-			
-		}
-		//añadir o eliminar un miembro.
-		else {
+		
+		if(DNI!=null &&Nombre==null &&FechaCreacion==null){
 			//Ejemplo: DNI=0000000A, 1111111A, 0000000B
 			String[] arrayDNIs = DNI.split(",");//Dividimos la ristra de DNIS, en varios String.
 			String[] arraymiembros= null;//Dividimos la lista de miembros en un array de strings.
 			//Mostramos los DNIs para ver que estan bien
-			System.out.print("DNIs: "); 
+			//System.out.print("DNIs: "); 
 			int i=0;
 			int j=0;
 			int controlmiembrosannadir=0;//Esta variable auxiliar nos ayudará a saber si un dni de los que le pasamos es un miembro actual
 			int controlmiembrosborrar=0;//Esta variable auxiliar nos ayudará a saber si borramos un miembro
-			for(i=0;i<arrayDNIs.length;i++) {
-				System.out.print(arrayDNIs[i] + ",\t");//Mostrar DNIs
-			}
+//			for(i=0;i<arrayDNIs.length;i++) {
+//				System.out.print(arrayDNIs[i] + ",\t");//Mostrar DNIs
+//			}
 
 			
 			try {
@@ -280,15 +228,68 @@ public class GrupoServerResource extends ServerResource{
 				}
 			}
 			catch (ExcepcionPersonas ex){
-				System.out.println("ExcepcionPersonas añadir Miembro");//No existe la persona solicitado
+				System.out.println("ExcepcionPersonas añadir Miembro if1");//No existe la persona solicitado
 				 throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, ex.getCausaFallo());//Se devuelve un error --> Recurso no encontrado.
 			}catch(ExcepcionGruposMusicales e)
 			{
-				System.out.println("ExcepcionGruposMusicales Borrar Album");//No existe el grupo solicitado
-				throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e.getCausaFallo());//Se devuelve un error --> Recurso no encontrado.
+				System.out.println("ExcepcionGruposMusicales");//No existe el grupo solicitado
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, e.getCausaFallo());//Se devuelve un error --> Recurso no encontrado.
 			}
 
+		}//Queremos crear un grupo y añadir miembros
+		else if (DNI!=null &&Nombre!=null &&FechaCreacion!=null) {
+			String[] arrayDNIs = DNI.split(",");//Dividimos la ristra de DNIS, en varios String.
+			int i=0;
+			String listamiembros = "";
+			try {
+				
+				//Creamos un grupo
+				controladorGruposMusicales.crearGrupoMusical(CIF, Nombre, FechaCreacion);
+				//añadimos los miembros
+				for(i=0;i<arrayDNIs.length;i++) {
+					//Vamos añadiendo en cada iteración del bucle los nuevos miembros
+					controladorGruposMusicales.anadirMiembro(CIF, arrayDNIs[i]);
+					listamiembros=listamiembros+arrayDNIs[i]+"\t";
+				}
+				//Almacenamos la información que vamos a mostrar al crear el grupo.
+				result =  new StringRepresentation("CIF: " + CIF +"\tNombre: " + Nombre+"\tFecha de creacion: " + FechaCreacion +"\tMiembros añadidos: "+listamiembros,   MediaType.APPLICATION_WWW_FORM);
+				getResponse().setStatus(Status.SUCCESS_CREATED, "Se ha creado con exito");
+			} 
+			//Controlamos las posibles excepciones que se pueden producir
+			catch (ExcepcionGruposMusicales ex){
+				System.out.println("ExcepcionGruposMusicales crearGrupo");//No existe el grupo solicitado
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, ex.getCausaFallo());//Se devuelve un error --> Recurso no encontrado.
+				
+			}catch (ParseException ax) {
+				System.out.println("ParseException creargrupo");
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Te falta un parámetro o has enviado un parámetro con una sintaxis errónea");//Se devuelve un error --> Los datos enviados por el usuario han sido enviado de manera errónea.
+			} catch (ExcepcionPersonas e) {
+				System.out.println("ExcepcionPersonas añadir Miembro if2");//No existe la persona solicitado
+				 throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "La persona no se ha encontrado pero el grupo ha sido creado correctamente");//Se devuelve un error --> Recurso no encontrado.
+			
+			}
+			
+		}		
+		else  { //Crear grupo sin miembros	
+			
+			try {
+				//Creamos un grupo
+				controladorGruposMusicales.crearGrupoMusical(CIF, Nombre, FechaCreacion);
+				//Almacenamos la información que vamos a mostrar al crear el grupo.
+				result =  new StringRepresentation("CIF: " + CIF +"\tNombre: " + Nombre+"\tFecha de creacion: " + FechaCreacion,   MediaType.APPLICATION_WWW_FORM);
+				getResponse().setStatus(Status.SUCCESS_CREATED, "Se ha creado con exito");
+			} 
+			//Controlamos las posibles excepciones que se pueden producir
+			catch (ExcepcionGruposMusicales ex){
+				System.out.println("ExcepcionGruposMusicales crearGrupo");//No existe el grupo solicitado
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, ex.getCausaFallo());//Se devuelve un error --> Recurso no encontrado.
+				
+			}catch (ParseException ax) {
+				System.out.println("ParseException creargrupo");
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Te falta un parámetro o has enviado un parámetro con una sintaxis errónea");//Se devuelve un error --> Los datos enviados por el usuario han sido enviado de manera errónea.
+			}
 		}
+		
 
 		
 		return result;//Devolvemos la variable de tipo Representation con todos los datos.

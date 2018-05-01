@@ -160,7 +160,8 @@ public class PistasServerResource extends ServerResource{
 				//Creamos una pista llamando al metodo anadirPista con la información necesaria.
 				idPista=controladorGruposMusicales.anadirPista(CIF, idAlbum, Nombre, duracion);//Nos devuelve el id de la pista recién creada.
 				//Almacenamos la información que vamos a mostrar al crear la pista.
-				result =  new StringRepresentation("CIF: " + CIF +" Album: " + idAlbum+" Nombre: " + Nombre +"Duracion: "+Duracion+"Uri: " +idPista,   MediaType.TEXT_PLAIN, Language.SPANISH, CharacterSet.ISO_8859_1);
+				result =  new StringRepresentation("CIF: " + CIF +"\t Album: " + idAlbum+"\t Nombre: " + Nombre +"\tDuracion: "+Duracion+"\tUri: " +idPista,   MediaType.TEXT_PLAIN, Language.SPANISH, CharacterSet.ISO_8859_1);
+				getResponse().setStatus(Status.SUCCESS_CREATED, "Se ha creado con exito");
 			} catch (ExcepcionAlbumes ex){
 				System.out.println("ExcepcionAlbumes Crearpista");//No existe el album solicitado
 				throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, ex.getCausaFallo());		//Se devuelve un error --> Recurso no encontrado.		
@@ -177,7 +178,11 @@ public class PistasServerResource extends ServerResource{
 			
 			
 		}
-		getResponse().setStatus(Status.SUCCESS_CREATED, "Se ha creado con exito");
+		else {
+			result = null;
+			getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST, "Cabecera mal introducida");
+		}
+		
 		return result;//Devolvemos la variable de tipo Representation
 	}	
 

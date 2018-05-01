@@ -36,7 +36,7 @@ printf '\n\nCrear grupo con metodo POST\n'
 curl -w "\nCodigo respuesta: %{http_code}" -X POST -H "Accept: $mediaType" $uri/grupos/X0123456X/ --data 'NOMBRE=Olimpo&FECHACREACION=20-11-2018'
 #Creacion con algun campo vacio
 printf '\n\nCrear grupo con nombre vacio\n'
-curl -w "\nCodigo respuesta: %{http_code}" -X PUT -H "Accept: $mediaType" $uri/grupos/X0123456X/ --data 'NOMBRE=&FECHACREACION=20-11-2018'
+curl -w "\nCodigo respuesta: %{http_code}" -X PUT -H "Accept: $mediaType" $uri/grupos/X0123456z/ --data 'NOMBRE=&FECHACREACION=20-11-2018'
 #Crear album campo vacio
 printf '\n\nAñadir album con un campo vacio\n'
 curl -w "\nCodigo respuesta: %{http_code}" -X POST -H "Accept: $mediaType" $uri/grupos/X0123456X/albumes/ --data 'TITULO=Dioses&FECHAPUBLICACION='	
