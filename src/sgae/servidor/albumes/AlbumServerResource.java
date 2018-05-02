@@ -112,8 +112,10 @@ public class AlbumServerResource extends ServerResource{
 				}			
 
 
+	}else {
+		getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "Cabecera mal introducida");
 	}
-		return result;//Devolvemos la variable de tipo Representation con todos los datos.
+	return result;//Devolvemos la variable de tipo Representation con todos los datos.
 	}
 	
 	/** 
@@ -164,8 +166,10 @@ public class AlbumServerResource extends ServerResource{
 				System.out.println("NumberFormatException Numero de ejemplares mal introducido");//No existe el grupo solicitado
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Numero de ejemplares mal introducido");		//Se devuelve un error --> Recurso no encontrado.
 			}
+		}else {
+			getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "Cabecera mal introducida");
 		}
-			return result;//Devolvemos la variable de tipo Representation con todos los datos.
+		return result;//Devolvemos la variable de tipo Representation con todos los datos.
 
 	}
 	

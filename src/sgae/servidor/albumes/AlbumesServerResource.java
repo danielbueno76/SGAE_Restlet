@@ -114,10 +114,11 @@ public class AlbumesServerResource extends ServerResource{
 			} catch (ExcepcionGruposMusicales e) {
 				System.out.println("ExcepcionGruposMusicales No existe el grupo");//No existe el grupo solicitado
 				throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e.getCausaFallo());		//Se devuelve un error --> Recurso no encontrado.
-			}
-			
-			
+			}		
 
+	}
+	else {
+		getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "Cabecera mal introducida");
 	}
 		return result; //Devuelve la variable Representation
 	}
@@ -168,9 +169,7 @@ public class AlbumesServerResource extends ServerResource{
 			}
 		}
 		else {
-			result = null;
-			getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST, "Cabecera mal introducida");
-			
+			getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "Cabecera mal introducida");
 		}
 		return result;  //Devolvemos la variable de tipo Representation
 		

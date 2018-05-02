@@ -113,6 +113,8 @@ public class PistaServerResource extends ServerResource{
 					}
 
 
+		}else {
+			getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "Cabecera mal introducida");
 		}
 		
 		return result;//Devolvemos la variable de tipo Representation con todos los datos.

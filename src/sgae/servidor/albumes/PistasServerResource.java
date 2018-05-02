@@ -127,6 +127,9 @@ public class PistasServerResource extends ServerResource{
 				
 
 		}
+		else {
+			getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "Cabecera mal introducida");
+		}
 		
 		return result;//Devuelve la variable Representation
 	}
@@ -180,7 +183,7 @@ public class PistasServerResource extends ServerResource{
 		}
 		else {
 			result = null;
-			getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST, "Cabecera mal introducida");
+			getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "Cabecera mal introducida");
 		}
 		
 		return result;//Devolvemos la variable de tipo Representation
